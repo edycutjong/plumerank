@@ -191,6 +191,78 @@ What the rows say, plainly:
 - **DEV is in-sample.** The fusion weights were fit here; the held-out run is the test of whether
   any of this generalises.
 
+**Failure cases — every held-out sequence, every system.** Same definition, from `per_sequence` in
+`results/bench_2026-10-10.json` (the single held-out read). All 54 windows are aligned on their
+ignition frame and ranked together, tick by tick (`scripts/bench.py`, `alert_trace`): from ignition
+onward the top 4 is contested by 54 simultaneous fires, for every system alike.
+
+| Sequence | PlumeRank | B1 rebased | B2 rebased | B1 deployed | B2 deployed |
+|---|---|---|---|---|---|
+| `20240728_Border65Fire_lp-s-mobo-c` | 10 | miss | 7 | miss | miss |
+| `20240728_Border65Fire_om-e-mobo-c` | 28 | miss | 5 | miss | miss |
+| `20240728_Border65Fire_pi-s-mobo-c` | miss | miss | 18 | miss | miss |
+| `20240802_WarnersFire_sojr-s-mobo-c` | 16 | miss | miss | miss | miss |
+| `20240813_PapaFire_rm-w-mobo-c` | miss | miss | 20 | miss | miss |
+| `20240823_ProctorFire_sm-s-mobo-c` | miss | 3 | miss | 18 | miss |
+| `20240825_TenajaFire_buff-n-mobo-c` | 5 | 15 | 9 | miss | miss |
+| `20240903_NavajoFire_cp-n-mobo-c` | miss | 24 | 29 | miss | miss |
+| `20240909_BridgeFire_marconi-n-mobo-c` | miss | miss | miss | miss | miss |
+| `20240909_BridgeFire_starr-n-mobo-c` | 16 | miss | 2 | miss | miss |
+| `20240909_BridgeFire_stgo-e-mobo-c` | miss | 37 | 14 | miss | 37 |
+| `20241006_SaddlebackFire_stgo-w-mobo-c` | miss | 32 | miss | miss | miss |
+| `20241007_Posta3Fire_pi-e-mobo-c` | 13 | miss | miss | miss | miss |
+| `20241031_QuarryFire_sm-w-mobo-c` | miss | 13 | miss | miss | miss |
+| `20241108_Pasqual4Fire_wc-n-mobo-c` | miss | 9 | miss | miss | miss |
+| `20241108_ResortFire_bm-n-mobo-c` | miss | 25 | miss | miss | miss |
+| `20241108_ResortFire_mg-n-mobo-c` | miss | 12 | 8 | miss | miss |
+| `20241113_Fire_dwpgm-w-mobo-c` | miss | 3 | miss | miss | miss |
+| `20250120_TedWilliamsFire_wc-w-mobo-m` | 29 | miss | miss | miss | miss |
+| `20250122_BernardoFire_ch-s-mobo-c` | miss | miss | miss | miss | miss |
+| `20250226_PennyFire_ml-w-mobo-c` | miss | miss | miss | miss | miss |
+| `20250429_TrailFire_rm-w-mobo-c` | miss | 36 | 17 | miss | miss |
+| `20250501_FelipeFire_ml-n-mobo-c` | miss | miss | miss | miss | miss |
+| `20250516_AcademyFire_wc-n-mobo-c` | 3 | 5 | 17 | miss | miss |
+| `20250530_HendersonFire_bh-w-mobo-c` | 35 | miss | miss | miss | miss |
+| `20250617_MonteFire_cp-w-mobo-c` | 12 | miss | miss | miss | miss |
+| `20250709_SteeleFire_lp-w-mobo-c` | miss | 15 | 5 | miss | miss |
+| `20250709_SteeleFire_om-n-mobo-c` | 20 | miss | miss | miss | miss |
+| `20250710_SpringsFire_lp-n-mobo-c` | 1 | 0 | miss | 24 | miss |
+| `20250801_BernardoFire_bl-n-mobo-c` | miss | miss | miss | miss | miss |
+| `20250823_VailFire_hp-w-mobo-c` | miss | 5 | miss | miss | miss |
+| `20250905_LodgeFire_sm-n-mobo-c` | 2 | miss | miss | miss | 28 |
+| `20250908_CochesFire_sm-n-mobo-c` | miss | miss | miss | miss | miss |
+| `20250914_HenshawFire_mg-n-mobo-c` | 8 | miss | miss | miss | miss |
+| `20251019_RanchFire_wc-w-mobo-m` | miss | miss | 6 | miss | miss |
+| `20251102_ScissorsFire_mp-n-mobo-m` | 8 | miss | miss | miss | 9 |
+| `20251102_ScissorsFire_vo-e-mobo-m` | miss | miss | miss | miss | miss |
+| `20260128_Fire_wilson-s-mobo-c` | miss | miss | miss | miss | miss |
+| `20260319_CrosleyFire_hp-w-mobo-c` | 38 | miss | miss | miss | miss |
+| `20260319_CrosleyFire_mpo-w-mobo-c` | miss | 16 | 16 | miss | miss |
+| `20260502_MissionFire_rm-e-mobo-c` | 24 | 2 | 25 | miss | miss |
+| `20260519_TusilFire_mlo-s-mobo-c` | 1 | miss | miss | miss | miss |
+| `20260622_BernardoFire_wc-w-mobo-c` | 5 | miss | 37 | miss | miss |
+| `20260629_JunctionFire_bm-e-mobo-c` | 0 | miss | miss | miss | miss |
+| `20260629_JunctionFire_mg-e-mobo-c` | 25 | miss | miss | miss | miss |
+| `20260629_JunctionFire_vo-n-mobo-c` | miss | miss | miss | miss | miss |
+| `20260629_JunctionFire_vo-w-mobo-c` | 26 | miss | miss | miss | miss |
+| `20260722_CreelmanFire_cp-w-mobo-c` | 8 | miss | 15 | miss | miss |
+| `20260722_CreelmanFire_mg-s-mobo-c` | 9 | miss | miss | miss | miss |
+| `20260722_RainbowFire_bh-w-mobo-c` | miss | miss | 37 | miss | miss |
+| `20260722_RainbowFire_rm-e-mobo-c` | 0 | miss | miss | miss | miss |
+| `20260807_BeaverFire_lp-w-mobo-c` | 7 | 4 | 6 | miss | miss |
+| `20260816_SorrentoFire_sdsc-e-mobo-c` | miss | miss | miss | miss | 21 |
+| `20260817_Church2Fire_mlo-s-mobo-c` | 11 | miss | 10 | miss | miss |
+
+What these rows say:
+
+- **PlumeRank misses 27 of 54**; B1 through the same baseline catches 13 of those. The two
+  overlap on only 5 detections and together catch 40 of 54 — mostly different fires. That is
+  post hoc on the held-out arm: a hypothesis for combining them, not a result.
+- **Paired, the lead is not significant**: 22 vs 13 against rebased B1 (exact McNemar p = 0.18),
+  17 vs 10 against rebased B2 (p = 0.25); where both detect, rebased B1 is faster on 3 of 5 and
+  rebased B2 on 5 of 10.
+- **9 sequences are missed by all five systems**.
+
 **How the headline was protected.** The constants were frozen and committed
 (`results/constants.sha256`) before any held-out frame was read; `scripts/bench.py` refuses to
 read HOLD otherwise, verifies every frame against the fetch receipt, and logs the single read with
@@ -253,6 +325,6 @@ Safeguards, each a build item rather than a paragraph (verified by `tests/test_a
 ## 9. What's next
 
 Error analysis on the three DEV sequences every system misses, and a test of whether
-PlumeRank and B1-through-the-baseline combine (they catch partly different sequences); night/IR detection (needs infrared hardware this build does not have); live RTSP ingest
+PlumeRank and B1-through-the-baseline combine (on the held-out arm they overlap on 5 detections and together catch 40 of 54 — §6); night/IR detection (needs infrared hardware this build does not have); live RTSP ingest
 (replayed from disk today); a second camera network (Pyronear) to test whether the per-camera
 baseline and the alert-budget calibration transfer across networks without refitting.

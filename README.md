@@ -3,7 +3,7 @@
 
   <h1>PlumeRank 🔥📷</h1>
   <p><em>A wall of wildfire cameras. One dispatcher. Which one gets opened next?</em></p>
-  <img src="docs/assets/readme-hero-animated.svg" alt="PlumeRank — ranks wildfire cameras against their own quiet night at 2 alerts per camera-night; schematic wall and watch list, with the held-out result 27/54 detected, p50 38.0 min" width="100%">
+  <img src="docs/assets/readme-hero-animated.svg" alt="PlumeRank — ranks wildfire cameras against their own quiet night at 2 alerts per camera-window; schematic wall and watch list, with the held-out result 27/54 detected, p50 38.0 min" width="100%">
 
   <br/>
 
@@ -50,32 +50,42 @@
 Mid-afternoon on a red-flag day, one watcher at a fire-agency command centre has a wall of
 camera tiles ([ALERTCalifornia](https://alertcalifornia.org/) alone runs more than 1,200 cameras)
 and a queue of AI smoke alerts to verify — CAL FIRE has routed such alerts to its dispatch
-centres since 2023. Every alert is an interruption; too many and the tool gets muted.
+centres since 2023 ([Boston Globe, 2023](https://www.bostonglobe.com/2023/08/24/nation/can-ai-detect-wildfires-faster-than-humans-california-is-trying-find-out)). Every alert is an interruption; too many and the tool gets muted.
 
 Published smoke detectors are scored on **per-frame accuracy** (F1, precision, recall) or on
 time-to-detection with no cap on false alarms. FIgLib's own reference model, SmokeyNet, reports
 89.84% precision, 76.45% recall and a 3.12-minute average time-to-detection
 ([Dewangan et al., 2022](https://arxiv.org/abs/2112.08598), Table 2) — with no alert budget
-attached. Deployed systems rarely publish where they sit on that trade-off, and none of it tells
+attached, and for a different event: minutes until the model first classifies a frame of the fire
+correctly, from a model trained on FIgLib itself. PlumeRank's clock stops only when the camera is in
+the top four of its roster *and* has fired an alert, and its one learned component never sees a
+Californian pixel. Deployed systems rarely publish where they sit on that trade-off, and none of it tells
 a fire agency whether the system will survive contact with a real shift before it gets muted. The number that matters is
 different: **how many minutes after ignition does a human actually look at the right camera,
 given they will only tolerate a fixed number of interruptions per camera?** That is detection
 delay at a fixed false-alarm rate — the classical quickest-change-detection criterion (Page, 1954;
-Lorden, 1971) — applied to a camera wall.
+Lorden, 1971) — applied to a camera wall. Neither the criterion nor per-camera rebasing is new; applying them
+to a wildfire camera wall, and publishing the operating point, is.
 
 **PlumeRank publishes that number.** It watches a camera network and emits, once per frame (one
 minute of footage), a ranked shortlist of which cameras a human should look at now — each entry carrying its own
-cropped evidence tile — calibrated to a fixed budget of **2 alerts per camera-night**. It never
+cropped evidence tile — calibrated to a fixed budget of **2 alerts per camera-window**. It never
 suppresses a camera and never dispatches an engine. It reorders human attention.
 
-> **The unit.** A *camera-night* in this project — called a *camera-window* on the landing page and in the
-> Devpost description, to stop it reading as a 12-hour night — is one evaluation window: **81 minutes of
+> **The unit.** A *camera-window* — `camera_night` in the code, a name that reads like a 12-hour
+> night and is not one — is one evaluation window: **81 minutes of
 > footage on one camera**, the length of a FIgLib sequence (`plumerank/constants.py`). So the
 > budget is 2 alerts per camera per 81-minute window — about 18 per camera over a 12-hour
-> shift if run continuously, not 2 per night. The name is the code's; the windows are daytime.
-> The budget is per camera: across a 1,200-camera network that is still thousands of alerts a
-> shift, so what an operator works from is the ranked top four, not the alert count — and the
-> operating curve below shows what a lower budget costs.
+> shift if run continuously, not 2 per night; the windows are daytime. Across a 1,200-camera
+> network that is about 21,600 alerts a 12-hour shift — far more than a team can verify. A
+> network-scale deployment would run far below 2 per window, where fewer than half the held-out
+> fires are detected (the operating curve below). Publishing that trade-off is the point.
+>
+> **Where it would sit.** The lift comes from rebasing, not from a better detector: through the
+> same per-camera baseline, the same CNN goes from 2 to 18 held-out fires and frame differencing
+> from 4 to 20. So PlumeRank could sit on the alert stream a watcher already verifies — as a
+> calibration-and-ranking layer over any detector, not a rival detector. That is a reading of
+> these results, not a deployment we have run.
 
 ---
 
@@ -86,7 +96,7 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > no constant was fit on, read exactly once after the constants were frozen
 > (`results/constants.sha256`, `results/hold_access.log`) — PlumeRank detected **27 of 54**, a
 > **median time-to-detection of 38.0 minutes** with every miss counted as never, at **2 alerts per
-> camera-night** calibrated on the fire-free confusion set (`results/bench_2026-10-10.json`).
+> camera-window** calibrated on the fire-free confusion set (`results/bench_2026-10-10.json`).
 > Neither baseline reaches a median: routed through PlumeRank's own per-camera baseline, the same
 > CNN detects 18 and frame differencing 20.
 >
@@ -101,8 +111,21 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > McNemar, from `per_sequence`), PlumeRank detects 22 fires rebased B1 misses against 13 the other
 > way (p = 0.18), and 17 against 10 for rebased B2 (p = 0.25); against both baselines as deployed
 > the split is 26–1 and 25–2 (p < 0.001). 14 of PlumeRank's 27 held-out detections were missed by
-> all four baselines. HOLD shares no camera with DEV (43 held-out cameras, 17 tuning cameras, none
-> in common), so it is held out by camera as well as by sequence.
+> all four baselines; where both detect, rebased B1 is faster on 3 of 5 and rebased B2 on 5 of 10.
+> HOLD shares no camera with DEV (43 held-out cameras, 17 tuning cameras, none in common), so it is
+> held out from tuning by camera as well as by sequence. The threshold's fire-free calibration
+> windows are, by design, on the same cameras: 31 of the 33 confusion windows sit on held-out
+> cameras, on non-fire days at the matched time of day (`data/manifest_confuse.json`, `selection`).
+>
+> **How the headline ranks.** `scripts/bench.py` aligns all 54 held-out windows on their ignition
+> frame and ranks them together, tick by tick: from ignition onward the top four — and the two
+> escalation slots per tick — are contested by 54 simultaneous fires. That is a fire-against-fire
+> test, the same for every system, and harder than a live wall where fires are rare.
+>
+> **What holds against the every-frame CNN is cost.** The detection lead over rebased B1 is not
+> significant at 54 fires; the cost gap is. Per frame the classical stage runs p50 6.5 ms against
+> 53.6 ms for the CNN grid (`latency_ms`), and PlumeRank makes 1.4 CNN calls per camera-window
+> against 3,645.
 
 | Metric | **HOLD — the headline** (54 fires) | DEV — tuning arm, in-sample (29 fires) |
 |---|---|---|
@@ -110,9 +133,9 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 | Median time-to-detection (misses = never) | **38.0 min** | 32.0 min |
 | Mean time-to-detection of the detected fires | 13.3 min | 16.9 min |
 | Median time-to-detection of the detected fires (conditional) | 10.0 min | 13.0 min |
-| Alert rate | 1.99 /camera-night on the confusion set (target 2.0); 1.92 realised on HOLD | 1.99 on the confusion set; 2.37 realised on DEV |
+| Alert rate | 1.99 /camera-window on the confusion set (target 2.0); 1.92 realised on HOLD | 1.99 on the confusion set; 2.37 realised on DEV |
 | Escalation fraction (frames sent to the ONNX classifier) | 1.76% — within the 2% cap | 2.14% — over the cap |
-| CNN calls per camera-night | 1.4 (PlumeRank) vs 3,645 (B1) | 1.8 vs 3,645 |
+| CNN calls per camera-window | 1.4 (PlumeRank) vs 3,645 (B1) | 1.8 vs 3,645 |
 | **B1 through the same per-camera baseline (like-for-like)** | **18 / 54 — no median** | 14 / 29 — no median |
 | **B2 through the same per-camera baseline (like-for-like)** | **20 / 54 — no median** | 10 / 29 — no median |
 | B1 as deployed (same CNN, every frame) | 2 / 54 — no median (threshold within 1e-6 of 1.0: saturated probabilities) | 6 / 29 — no median |
@@ -122,7 +145,7 @@ Every system is calibrated to the same budget **on the same 33 fire-free windows
 1.99). The HOLD run executed on a local arm64 machine (`run.instance: local (not EC2)`, wall clock
 12m29s), not on the endpoint box, so serving judges was never at risk; `make fetch && make bench`
 reproduces it anywhere. Per-sequence results for every system are in each file's `per_sequence`;
-[`REPORT.md`](REPORT.md) §6 tabulates the DEV ones, and the site's log lists all 54 held-out rows. The live wall runs on the same frozen threshold
+[`REPORT.md`](REPORT.md) §6 tabulates every DEV and every held-out sequence. The live wall runs on the same frozen threshold
 (0.849), which depends only on the confusion set.
 
 **The curve, not just the point** (HOLD, `operating_curve` in `results/bench_2026-10-10.json`;
@@ -131,10 +154,12 @@ each budget's threshold solved on the same confusion set):
 | Budget (alerts per camera-window) | 0.5 | 1 | **2 (shipped)** | 4 | 8 |
 |---|---|---|---|---|---|
 | PlumeRank median TTD (misses = never) | no median | no median | **38.0 min** | 15.0 min | 13.0 min |
-| B1 / B2 as deployed | no median | no median | no median | no median | no median |
 
 Below 2 alerts per window fewer than half the held-out fires are detected; doubling the budget to
-4 more than halves the median.
+4 more than halves the median. `operating_curve` was computed at the single held-out read with
+medians only, and only for the as-deployed baselines (no median at any budget); per-budget
+detection counts and the rebased baselines' curve were not computed then, and HOLD is not re-read
+to add them.
 
 ## Honest limitations
 
@@ -146,7 +171,7 @@ Below 2 alerts per window fewer than half the held-out fires are detected; doubl
 2. **Cloud is the adversary — not the fog this project was designed against — and the
    statistics are weaker than the design assumed.** Measured on 2026-09-06 under the
    *pre-baseline* pipeline (threshold 0.722, not re-measured under the shipped one), low cloud
-   cost 4.25 and cloud shadow 3.86 alerts/camera-night against fog's 1.15
+   cost 4.25 and cloud shadow 3.86 alerts/camera-window against fog's 1.15
    (`results/class_split_2026-09-06.json`) — and a blind census shows the rule that chose the fog windows picks a
    marine layer no more often than chance (29% vs a 29% base rate on unscreened dawn frames;
    `results/fog_census_2026-10-04.md`), so the "fog" class is mostly overcast. The threshold is
@@ -181,7 +206,7 @@ Below 2 alerts per window fewer than half the held-out fires are detected; doubl
 8. **The classifier escalation does not earn a detection on DEV, and the shipped cell is not
    the best DEV cell on count.** The twelve-cell grid (`results/ablation_2026-10-10.csv`,
    {MOG2, LSBP, GSOC} × S4 on/off × escalation on/off, all through the shipped per-camera
-   baseline at 2.0 alerts/camera-night) shows escalation on and off detecting the same number of fires in
+   baseline at 2.0 alerts/camera-window) shows escalation on and off detecting the same number of fires in
    five of six pairs, and one fewer with it on in the sixth. S4 is the component that moves the
    count (MOG2: 17 with it, 14 without). GSOC with S4 off detects 18/29 at p50 33.0 against the
    shipped cell's 17/29 at p50 32.0. DEV is the tuning arm, so none of this re-opened the frozen
@@ -201,7 +226,7 @@ Below 2 alerts per window fewer than half the held-out fires are detected; doubl
    medians), and the whole-frame phase correlation was pulled toward it. On the fire-free set the
    threshold is solved on, every warp of ≥ 1 px therefore shifts a static ridgeline — and it
    costs little, measured by counterfactual: replaying CONFUSE as the committed run did
-   (reproducing its 1.9885 alerts per camera-night and its threshold exactly) and again with
+   (reproducing its 1.9885 alerts per camera-window and its threshold exactly) and again with
    those 39 warps not applied changes the uncapped threshold crossings from 64 to 63, and the
    threshold the 2.0 budget solves to from 0.8492 to 0.8482 (`scripts/measure_registration_alerts.py`,
    `results/registration_alerts_2026-10-10.json`). The effect spreads over whole windows rather
@@ -253,7 +278,7 @@ comparison by having a bigger model, because the model is identical on both side
 
 **Required by the competition**, and structural rather than decorative. Most of these calls also
 exist in OpenCV 4.x; what is version-5 here is the DNN engine (`dnn.ENGINE_NEW`, selected and
-reported live by `/build-info`), plus `phaseCorrelateIterative`, added in 4.13 / 5.0. The claim is
+reported live by `/build-info`). `phaseCorrelateIterative` is recent (4.13 / 5.0) but not 5-only. The claim is
 that OpenCV does the substantive work, not that only 5 could: 23 defended OpenCV 5
 surfaces across 6 modules — 18 analysis calls plus 5 runtime/introspection ones (thread
 pinning, timing, build info, and two engine/estimator flags) — mechanically counted from the source by
@@ -410,7 +435,7 @@ Written from the record, not from memory; each line names the file that caught i
   baseline, background and budget cell (`scripts/bench.py` `results_filename`; S4 fixed 2026-09-06 per
   `results/artefact_provenance_2026-09-06.md` §7, the other three on 2026-10-04 in `c977858`).
 - **The design premise was fog; the adversary is cloud.** Low cloud and cloud shadow cost 4.25 and
-  3.86 alerts per camera-night against fog's 1.15 (pre-baseline threshold,
+  3.86 alerts per camera-window against fog's 1.15 (pre-baseline threshold,
   `results/class_split_2026-09-06.json`), and a blind census found the rule that
   chose the fog windows picks a marine layer at chance (`results/fog_census_2026-10-04.md`).
 - **The statistic the design rests on is anti-predictive alone.** S3, diffuse-boundary contrast,
