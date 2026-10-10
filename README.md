@@ -112,10 +112,11 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > way (p = 0.18), and 17 against 10 for rebased B2 (p = 0.25); against both baselines as deployed
 > the split is 26–1 and 25–2 (p < 0.001). 14 of PlumeRank's 27 held-out detections were missed by
 > all four baselines; where both detect, rebased B1 is faster on 3 of 5 and rebased B2 on 5 of 10.
-> HOLD shares no camera with DEV (43 held-out cameras, 17 tuning cameras, none in common), so it is
-> held out from tuning by camera as well as by sequence. The threshold's fire-free calibration
-> windows are, by design, on the same cameras: 31 of the 33 confusion windows sit on held-out
-> cameras, on non-fire days at the matched time of day (`data/manifest_confuse.json`, `selection`).
+> No held-out fire was seen before the read; the held-out cameras were seen on fire-free days, by
+> design. HOLD shares no camera with DEV (43 held-out cameras, 17 DEV cameras, none in common), but
+> 31 of the 33 fire-free confusion windows sit on held-out cameras, on non-fire days at the matched
+> time of day (`data/manifest_confuse.json`, `selection`) — and every threshold, every DEV
+> comparison made at the budget, and the class-split and registration analyses ran on them.
 >
 > **How the headline ranks.** `scripts/bench.py` aligns all 54 held-out windows on their ignition
 > frame and ranks them together, tick by tick: from ignition onward the top four — and the two
