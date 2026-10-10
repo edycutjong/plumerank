@@ -127,7 +127,7 @@ export function OperatingCurve({ data }: { data: Benchmark }) {
           ))}
 
           <text x={(W + PAD.left) / 2} y={H - 4} textAnchor="middle" fill="var(--ink-2)" fontSize="13">
-            alert budget (alerts per camera-night)
+            alert budget (alerts per camera-window)
           </text>
           <text x={8} y={16} fill="var(--ink-2)" fontSize="13">
             median minutes to detection
@@ -156,7 +156,7 @@ export function OperatingCurve({ data }: { data: Benchmark }) {
           {op === null
             ? `operating point ${ABSENT}`
             : opInRange
-              ? `dashed line: the operating point, ${rate(op, 1)} alerts per camera-night`
+              ? `dashed line: the operating point, ${rate(op, 1)} alerts per camera-window`
               : `operating point ${rate(op, 1)} lies outside the published budgets and is not marked`}
           {" · "}budgets evenly spaced; y axis starts at 0
         </span>

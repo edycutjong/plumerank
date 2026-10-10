@@ -97,7 +97,7 @@ export function WatchList({
       >
         <span className="label">watch list</span>
         <span className="label" style={{ textTransform: "none", letterSpacing: 0 }}>
-          {rows.length === 0 ? "none removed" : `${rows.length} cameras, none removed`}
+          {rows.length === 0 ? "none removed" : `${rows.length} camera tiles, none removed`}
         </span>
       </div>
       {/* What the rank IS, said once above the rows: the score each row carries is how

@@ -118,13 +118,13 @@ function DevelopmentEvidence() {
               <tr>
                 <th scope="row">target</th>
                 <td className="mono" style={{ fontWeight: 400 }}>
-                  {rate(DEV_RUN.budget.target)} alerts / camera-night
+                  {rate(DEV_RUN.budget.target)} alerts / camera-window
                 </td>
               </tr>
               <tr>
                 <th scope="row">realised on the confusion set (uncapped)</th>
                 <td className="mono" style={{ fontWeight: 400 }}>
-                  {rate(DEV_RUN.budget.realised_uncapped)} alerts / camera-night
+                  {rate(DEV_RUN.budget.realised_uncapped)} alerts / camera-window
                 </td>
               </tr>
               <tr>
@@ -221,9 +221,16 @@ export default function ResultsPage() {
                 </span>
               </div>
               <p style={{ color: "var(--ink-2)", fontSize: "var(--size-label)", marginTop: 8 }}>
-                at {rate(data.budget.target, 1)} alerts per camera-night. A missed sequence
+                at {rate(data.budget.target, 1)} alerts per camera-window. A missed sequence
                 counts as +infinity, never dropped and never imputed, so the miss count is
                 published next to every percentile rather than under it.
+                {typeof measuredOn === "number" && typeof data.headline.n_missed === "number" &&
+                data.headline.p50_minutes !== null
+                  ? ` The p50 is nearest-rank (plumerank/metrics.py): the ${Math.ceil(measuredOn / 2)}th of ${measuredOn}` +
+                    (measuredOn - data.headline.n_missed === Math.ceil(measuredOn / 2)
+                      ? ` — with exactly ${measuredOn - data.headline.n_missed} detected, the slowest detection.`
+                      : ".")
+                  : ""}
               </p>
             </header>
 
@@ -263,9 +270,9 @@ export default function ResultsPage() {
                       <th>p50 (min)</th>
                       <th>p95 (min)</th>
                       <th>missed</th>
-                      <th>alerts / camera-night (confusion set)</th>
+                      <th>alerts / camera-window (confusion set)</th>
                       <th>realised on these fires</th>
-                      <th>model calls / camera-night</th>
+                      <th>model calls / camera-window</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -306,13 +313,13 @@ export default function ResultsPage() {
                     <tr>
                       <th scope="row">target</th>
                       <td className="mono" style={{ fontWeight: 400 }}>
-                        {rate(data.budget.target)} alerts / camera-night
+                        {rate(data.budget.target)} alerts / camera-window
                       </td>
                     </tr>
                     <tr>
                       <th scope="row">realised (uncapped)</th>
                       <td className="mono" style={{ fontWeight: 400 }}>
-                        {rate(data.budget.realised_uncapped)} alerts / camera-night
+                        {rate(data.budget.realised_uncapped)} alerts / camera-window
                       </td>
                     </tr>
                     <tr>
