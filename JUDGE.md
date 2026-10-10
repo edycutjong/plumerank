@@ -36,7 +36,7 @@ here is one 81-minute window of footage on one camera — the length of a FIgLib
 ```bash
 git clone https://github.com/edycutjong/plumerank && cd plumerank
 python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.lock
-make test      # ~2 min: the 735-test offline suite + coverage + the claim-consistency check above
+make test      # ~2 min: the 832-test offline suite + coverage + the claim-consistency check above
 make verify    # ≤3 min: rebuilds the venv from the lockfile, re-runs the offline suite, then
                # recomputes the micro-corpus metrics and checks them byte-for-byte against the
                # committed results/verify_micro.json. This is the fast sanity check — it does

@@ -105,7 +105,7 @@ export default function JudgePage() {
       <Section title="3. Reproduce it yourself">
         <pre className="code" style={{ padding: 12, overflowX: "auto", whiteSpace: "pre" }}>
 {`python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.lock
-make test      # ~2 min: 735-test offline suite + coverage + the claim-consistency check
+make test      # ~2 min: 832-test offline suite + coverage + the claim-consistency check
 make verify    # ≤ 3 min: rebuilds the venv, re-runs the suite, recomputes the
                # micro-corpus metrics against the committed results. Does NOT
                # reproduce the published headline, and says so on screen.`}
