@@ -58,6 +58,12 @@ PUBLISHED, NOT RECOMPUTED HERE
   reproduce with: make fetch && make bench  (about 95 min)
 ```
 
+Two lines of that printout, read literally: `model calls` is printed rounded to an integer (the
+file's `model_invocations_per_camera_night.plumerank` is 1.424 — 75 CNN calls over 4,266 frames,
+expressed per 81-frame camera-window; B1's 3,645 is its 191,970 calls over the same 4,266 frames,
+same normalisation). `advantage not finite` means PlumeRank has a median at offsets where neither
+baseline has one, so a difference in minutes is undefined — not that there is no advantage.
+
 `make test` alone (the offline suite + coverage + `scripts/check_claims.py`): **832 passed, 1
 skipped, 100% line coverage on `plumerank/`, ~2 min, no network, no credentials.**
 
@@ -71,7 +77,12 @@ make bench   # 12m29s on the arm64 machine that produced results/bench_2026-10-1
 ```
 
 Nobody needs to run this to evaluate the submission — `results/` already carries every
-artefact any document cites, and the live box runs the identical code. It exists so the number
+artefact any document cites, and the live box runs the same scoring code: since the held-out
+commit `5df7332`, `plumerank/` has changed only in docstrings and in how the evidence crop is
+drawn (`EVIDENCE_RENDER_SCALE`, rendering only — nothing reaches a hazard, a rank or a
+threshold), and `api/` only in how the wall is served (`git diff --stat 5df7332..HEAD --
+plumerank/ api/`). The one pre-read fix to `plumerank/statistic.py` (the x86-64 DIS guard,
+`09d816d`, 05:09Z) landed before `5df7332` and before the 05:37Z read. It exists so the number
 is checkable, not just assertable.
 
 ## The held-out receipt
