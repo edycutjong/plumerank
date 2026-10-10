@@ -107,13 +107,13 @@ publish any threshold it could not calibrate to the budget (`_check_calibration`
 Evidence crops are static files served by Caddy directly -- image serving never touches the
 Python process.
 
-## Why OpenCV 5, not a smaller stack
+## Why OpenCV, not a smaller stack
 
-Take OpenCV 5 out and this does not degrade -- it does not exist. Five modules would each need
+Take OpenCV out and this does not degrade -- it does not exist. Five modules would each need
 a replacement: a background-modelling library for `createBackgroundSubtractorMOG2`, a
 phase-correlation stabiliser for `phaseCorrelate`, a robust-estimation library for
 `estimateAffine2D(USAC_MAGSAC)`, a dense optical-flow implementation for `DISOpticalFlow_create`,
-and a second inference runtime for `dnn.readNetFromONNX`. See `README.md`'s "Why OpenCV 5"
+and a second inference runtime for `dnn.readNetFromONNX`. See `README.md`'s "The OpenCV 5 surfaces it uses"
 table for the full 23-surface count, mechanically verified by `scripts/check_claims.py` on
 every `make test` run.
 

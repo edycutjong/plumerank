@@ -47,26 +47,35 @@
 
 ## The question
 
-It is 04:50 on a night shift at a CAL FIRE emergency command centre, and the one dispatcher
-awake is looking at a wall of camera tiles ([ALERTCalifornia](https://alertcalifornia.org/) alone runs more than 1,200 cameras) with no instrument that tells her which four
-to open in the next sixty seconds.
+Mid-afternoon on a red-flag day, one watcher at a fire-agency command centre has a wall of
+camera tiles ([ALERTCalifornia](https://alertcalifornia.org/) alone runs more than 1,200 cameras)
+and a queue of AI smoke alerts to verify — CAL FIRE has routed such alerts to its dispatch
+centres since 2023. Every alert is an interruption; too many and the tool gets muted.
 
 Published smoke detectors are scored on **per-frame accuracy** (F1, precision, recall) or on
-time-to-detection with no cap on false alarms. Neither tells her which tile to open, and none of it tells a fire agency whether the system
-will survive contact with a real shift before it gets muted. The number that matters is
+time-to-detection with no cap on false alarms. FIgLib's own reference model, SmokeyNet, reports
+89.84% precision, 76.45% recall and a 3.12-minute average time-to-detection
+([Dewangan et al., 2022](https://arxiv.org/abs/2112.08598), Table 2) — with no alert budget
+attached. Deployed systems rarely publish where they sit on that trade-off, and none of it tells
+a fire agency whether the system will survive contact with a real shift before it gets muted. The number that matters is
 different: **how many minutes after ignition does a human actually look at the right camera,
-given she will only tolerate a fixed number of interruptions per camera?**
+given they will only tolerate a fixed number of interruptions per camera?** That is detection
+delay at a fixed false-alarm rate — the classical quickest-change-detection criterion (Page, 1954;
+Lorden, 1971) — applied to a camera wall.
 
 **PlumeRank publishes that number.** It watches a camera network and emits, once per frame (one
 minute of footage), a ranked shortlist of which cameras a human should look at now — each entry carrying its own
 cropped evidence tile — calibrated to a fixed budget of **2 alerts per camera-night**. It never
 suppresses a camera and never dispatches an engine. It reorders human attention.
 
-> **The unit.** A *camera-night* in this project — called a *camera-window* on the landing page and an
-> *81-minute window* in the Devpost description, to stop it reading as a 12-hour night — is one evaluation window: **81 minutes of
+> **The unit.** A *camera-night* in this project — called a *camera-window* on the landing page and in the
+> Devpost description, to stop it reading as a 12-hour night — is one evaluation window: **81 minutes of
 > footage on one camera**, the length of a FIgLib sequence (`plumerank/constants.py`). So the
 > budget is 2 alerts per camera per 81-minute window — about 18 per camera over a 12-hour
 > shift if run continuously, not 2 per night. The name is the code's; the windows are daytime.
+> The budget is per camera: across a 1,200-camera network that is still thousands of alerts a
+> shift, so what an operator works from is the ranked top four, not the alert count — and the
+> operating curve below shows what a lower budget costs.
 
 ---
 
@@ -82,15 +91,25 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > CNN detects 18 and frame differencing 20.
 >
 > **The median is on a knife edge, and that is part of the result.** It exists because exactly half
-> the fires were detected. Re-scored against an ignition clock shifted by −5…0 minutes it reads
+> the fires were detected — so with misses counted as never, the median *is* the 27th and slowest
+> detection, 38.0 min, near the end of the ~40 post-ignition minutes a FIgLib sequence records; one
+> fewer detection and it would not exist. The detected fires themselves are found sooner: median
+> 10.0 min, mean 13.3 min (conditional on detection). Re-scored against an ignition clock shifted by −5…0 minutes it reads
 > 32–38 min; at +1…+5 minutes fewer than half count as detected and there is no median
-> (`results/sensitivity_2026-10-10.csv`). The detection counts are the steadier comparison.
+> (`results/sensitivity_2026-10-10.csv`). The detection counts are the steadier comparison — but at
+> 54 fires, not a significant one against the rebased baselines. Paired on the same fires (exact
+> McNemar, from `per_sequence`), PlumeRank detects 22 fires rebased B1 misses against 13 the other
+> way (p = 0.18), and 17 against 10 for rebased B2 (p = 0.25); against both baselines as deployed
+> the split is 26–1 and 25–2 (p < 0.001). 14 of PlumeRank's 27 held-out detections were missed by
+> all four baselines. HOLD shares no camera with DEV (43 held-out cameras, 17 tuning cameras, none
+> in common), so it is held out by camera as well as by sequence.
 
 | Metric | **HOLD — the headline** (54 fires) | DEV — tuning arm, in-sample (29 fires) |
 |---|---|---|
 | PlumeRank detected | **27 / 54** | 17 / 29 |
 | Median time-to-detection (misses = never) | **38.0 min** | 32.0 min |
 | Mean time-to-detection of the detected fires | 13.3 min | 16.9 min |
+| Median time-to-detection of the detected fires (conditional) | 10.0 min | 13.0 min |
 | Alert rate | 1.99 /camera-night on the confusion set (target 2.0); 1.92 realised on HOLD | 1.99 on the confusion set; 2.37 realised on DEV |
 | Escalation fraction (frames sent to the ONNX classifier) | 1.76% — within the 2% cap | 2.14% — over the cap |
 | CNN calls per camera-night | 1.4 (PlumeRank) vs 3,645 (B1) | 1.8 vs 3,645 |
@@ -105,6 +124,17 @@ Every system is calibrated to the same budget **on the same 33 fire-free windows
 reproduces it anywhere. Per-sequence results for every system are in each file's `per_sequence`;
 [`REPORT.md`](REPORT.md) §6 tabulates the DEV ones, and the site's log lists all 54 held-out rows. The live wall runs on the same frozen threshold
 (0.849), which depends only on the confusion set.
+
+**The curve, not just the point** (HOLD, `operating_curve` in `results/bench_2026-10-10.json`;
+each budget's threshold solved on the same confusion set):
+
+| Budget (alerts per camera-window) | 0.5 | 1 | **2 (shipped)** | 4 | 8 |
+|---|---|---|---|---|---|
+| PlumeRank median TTD (misses = never) | no median | no median | **38.0 min** | 15.0 min | 13.0 min |
+| B1 / B2 as deployed | no median | no median | no median | no median | no median |
+
+Below 2 alerts per window fewer than half the held-out fires are detected; doubling the budget to
+4 more than halves the median.
 
 ## Honest limitations
 
@@ -134,9 +164,11 @@ reproduces it anywhere. Per-sequence results for every system are in each file's
    in-sample by construction. Likewise the baseline window: 10 minutes scored 18/29 (p50 30.0)
    against the shipped 15 minutes' 17/29 (p50 32.0) — one sequence apart, inside the noise, and
    kept as a design choice rather than tuned (`results/baseline_calibrated_2026-09-16.md`).
-4. **The novelty is a metric reframe, not a new sensor.** The individual OpenCV operations are
-   well-known; what is new is the primitive that composes them and the attention-budget
-   objective they are pointed at.
+4. **The novelty is the objective and the per-camera rebasing, not a new sensor or statistic.**
+   The individual OpenCV operations are well-known, and per frame the four statistics barely beat
+   "a component exists" (0.0015 AUC in-sample). What is new is the attention-budget objective —
+   detection delay at a fixed alert rate — and scoring each camera against its own trailing
+   baseline, which is what lifts detection.
 5. **One instance, no HA, no static mirror.** The endpoint is a single Graviton `t4g.small`
    (unlimited credit mode), funded by the competition's AWS compute grant.
    Every published number is committed in `results/` so the claim survives the box going down.
@@ -217,9 +249,12 @@ Apache-2.0) and touches only the ~2% of frames the classical stage escalates. Th
 *is* baseline B1, run over every frame instead of 2% of them: PlumeRank cannot win this
 comparison by having a bigger model, because the model is identical on both sides.
 
-### Why OpenCV 5, specifically
+### The OpenCV 5 surfaces it uses
 
-**Required by the competition**, and structural rather than decorative: 23 defended OpenCV 5
+**Required by the competition**, and structural rather than decorative. Most of these calls also
+exist in OpenCV 4.x; what is version-5 here is the DNN engine (`dnn.ENGINE_NEW`, selected and
+reported live by `/build-info`), plus `phaseCorrelateIterative`, added in 4.13 / 5.0. The claim is
+that OpenCV does the substantive work, not that only 5 could: 23 defended OpenCV 5
 surfaces across 6 modules — 18 analysis calls plus 5 runtime/introspection ones (thread
 pinning, timing, build info, and two engine/estimator flags) — mechanically counted from the source by
 `scripts/check_claims.py` on every `make test` run (never hand-typed):
@@ -276,6 +311,8 @@ heartbeat-silence alarm that reboots the instance if the service stops beating. 
 5. **No new imagery is collected.** The wall replays public HPWREN FIgLib footage of
    landscapes; the only frames it writes are small evidence crops and thumbnails of that
    footage for the screen, overwritten on every replay.
+6. **A persistent, non-dismissible limits strip** on every screen: daylight only; ranking aid,
+   not dispatch; never suppresses a camera.
 
 ---
 
@@ -326,6 +363,23 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.lock
 cd web && npm install
 cp .env.example .env.local   # NEXT_PUBLIC_PLUMERANK_API — see web/.env.example
 npm run dev                  # http://127.0.0.1:3000
+```
+
+### Deploy to AWS
+
+The live endpoint is one Graviton `t4g.small` provisioned by `deploy/bootstrap.sh` — idempotent;
+Caddy, Uvicorn under systemd, OpenCV 5.0.0 from the pinned wheel (no source build). The full
+runbook — key pair, instance role, security group, S3 bundle, launch, DNS and TLS, CloudWatch
+alarms — is [`deploy/launch.md`](deploy/launch.md). A re-deploy is its §9: upload a git bundle,
+open port 22 to one address, run the bootstrap, close it again.
+
+```bash
+git bundle create /tmp/plumerank.bundle --branches --tags
+aws s3 cp /tmp/plumerank.bundle "s3://$PR_BUCKET/src/plumerank.bundle"
+MY_IP=$(curl -fsS https://checkip.amazonaws.com)
+aws ec2 authorize-security-group-ingress --group-id "$PR_SG" --protocol tcp --port 22 --cidr "${MY_IP}/32"
+ssh -i ~/.ssh/${PR_KEYPAIR}.pem ec2-user@"$PR_DOMAIN" "sudo bash /opt/plumerank/deploy/bootstrap.sh"
+aws ec2 revoke-security-group-ingress --group-id "$PR_SG" --protocol tcp --port 22 --cidr "${MY_IP}/32"
 ```
 
 No API keys, no accounts, no login anywhere in this stack.

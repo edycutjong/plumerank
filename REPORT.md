@@ -18,7 +18,11 @@ The number that matters is different: **how many minutes after ignition does a h
 look at the right camera, given she will tolerate only a fixed number of interruptions per
 camera?** Raise sensitivity and you buy minutes at the cost of alarm fatigue; lower
 it and the network goes quiet and late. Every deployed system lives somewhere on that curve.
-Deployed systems rarely publish where they sit on it. PlumeRank does.
+Deployed systems rarely publish where they sit on it. PlumeRank does. (FIgLib's own reference
+model, SmokeyNet, reports a 3.12-minute average time-to-detection at 89.84% precision and 76.45%
+recall — Dewangan et al., 2022, arXiv:2112.08598, Table 2 — with no alert budget attached. Delay at
+a fixed false-alarm rate is the classical quickest-change-detection criterion: Page, 1954; Lorden,
+1971.)
 
 **The unit.** The budget is expressed per *camera-night*, which in this project means one
 evaluation window — 81 minutes of footage on one camera, the length of a FIgLib sequence — not a
@@ -27,9 +31,11 @@ shift. A deployment would set a per-shift budget and re-solve the threshold for 
 
 ## 2. Users
 
-- **Primary — the night-shift dispatcher or camera watcher** at a public fire agency command
-  centre. Not a data scientist, not a developer. The tool has to be legible at a glance, at
-  04:50, on a projector, without training — which is why the Wall's landing band is "cameras,
+- **Primary — the dispatcher or camera watcher on a daytime shift** at a public fire agency
+  command centre, verifying a queue of AI smoke alerts (CAL FIRE has routed such alerts from
+  ALERTCalifornia's cameras to its dispatch centres since 2023). Not a data scientist, not a
+  developer. The tool has to be legible at a glance, at the end of a long shift, on a projector,
+  without training — which is why the Wall's landing band is "cameras,
   rank, evidence crop" and nothing else on the first screen.
 - **Secondary — the network operations engineer** who sets the alert budget and answers for
   it. Served by the budget ledger and the CloudWatch drift alarms — the budget is a knob with
@@ -38,7 +44,9 @@ shift. A deployment would set a per-shift budget and re-solve the threshold for 
   roughly one in three — sit in the wildland–urban interface, and the interface is the
   fastest-growing land-use type in the country. Concretely: Paradise, California,
   2018 — 85 deaths, 18,804 structures lost, in a fire whose growth rate made every minute of
-  detection latency worth acres of spread.
+  detection latency worth acres of spread. It began around dawn, outside what this daylight-only
+  build covers (§7); it is cited for the stakes of detection latency, not as a fire PlumeRank
+  would have caught.
 
 ## 3. Architecture
 
@@ -59,7 +67,7 @@ analysis") and structural here, not decorative: **23 defended OpenCV 5 surfaces 
 modules** (18 analysis calls, 5 runtime/introspection) (video, imgproc, geometry, bgsegm, dnn, core), mechanically counted from
 the real source on every `make test` run by `scripts/check_claims.py` — never hand-typed, never
 quoted from a plan. The full table with per-surface "what you would need without it" is in
-`README.md`'s "Why OpenCV 5" section.
+`README.md`'s "The OpenCV 5 surfaces it uses" section.
 
 The one trained component — a 96×96 ONNX tile classifier, reached through
 `cv2.dnn.readNetFromONNX(ENGINE_NEW)` — is trained **only** on Pyro-SDIS (Apache-2.0, French
