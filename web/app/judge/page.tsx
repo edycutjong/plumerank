@@ -91,9 +91,12 @@ export default function JudgePage() {
             <Link href="/results">/results</Link>)
           </li>
           <li>
-            <strong>Held-out set — the headline: 27/54 detected, median 38.0 min</strong> at 2.0
-            alerts per camera-night; like-for-like baselines 18/54 and 20/54, neither reaching a
-            median (<span className="mono">results/bench_2026-10-10.json</span>) — see §4
+            <strong>Held-out set — the headline: 27/54 detected</strong> at 2.0 alerts per
+            camera-window, ranked fire-against-fire (all 54 aligned on ignition). Median 38.0 min with
+            misses as never — the 27th and slowest detection; the detected fires: median 10.0, mean
+            13.3. Like-for-like baselines 18/54 and 20/54 (paired p = 0.18 and 0.25 — a lead, not
+            significant), at 1.4 CNN calls per camera-window against 3,645 (
+            <span className="mono">results/bench_2026-10-10.json</span>) — see §4
           </li>
           <li>
             One AWS <code className="code-inline">t4g.small</code> (Graviton) and one S3 bucket. No
