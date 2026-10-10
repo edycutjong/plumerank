@@ -65,7 +65,7 @@ explained by model size. The like-for-like rows go one step further: B1 and B2 a
 through the same per-camera baseline PlumeRank uses, and on DEV that baseline does most of the
 work (B1 rises from 6/29 to 14/29 through it, against PlumeRank's 17/29). What remains between
 PlumeRank and B1-through-the-baseline is the classical pipeline plus targeted escalation versus a
-full-frame CNN at every frame -- at 1.4 model calls per camera-night on the held-out run (1.8 on DEV) instead of 3,645.
+full-frame CNN at every frame -- at 1.4 model calls per camera-night on the held-out run (1.7 on DEV) instead of 3,645.
 
 ## Data flow, in order
 
@@ -101,7 +101,7 @@ publish any threshold it could not calibrate to the budget (`_check_calibration`
 |---|---|
 | `GET /build-info` | `cv2.getBuildInformation()` verbatim, `cv2.__version__`, a module-availability probe, the instance id and AMI id, the git commit sha |
 | `GET /health` | liveness, uptime, replay state, the live-pipeline availability flag and reason |
-| `GET /api/watchlist` | Server-Sent Events: a `meta` event (camera roster, budget, threshold), then one tick per replayed frame (one minute of footage; the box replays about one tick per second with 62 cameras -- 1.001 s measured with one viewer on 2026-10-10 -- and /health publishes the measured period) |
+| `GET /api/watchlist` | Server-Sent Events: a `meta` event (camera roster, budget, threshold), then one tick per replayed frame (one minute of footage; the box replays about one tick per second with 62 camera tiles -- 1.001 s measured with one viewer on 2026-10-10 -- and /health publishes the measured period) |
 | `GET /api/benchmark` | `results/bench_<date>.json` served verbatim, or `404` with an explicit message if it does not exist yet |
 
 Evidence crops are static files served by Caddy directly -- image serving never touches the

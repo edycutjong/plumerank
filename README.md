@@ -42,7 +42,7 @@
 
 > **The live wall on one Graviton box.** HPWREN FIgLib footage replays through the real
 > OpenCV 5 pipeline → every camera is scored against its own last 15 minutes → the watch list
-> re-ranks all 62 cameras every second, at a budget of 2 alerts per camera-window.
+> re-ranks all 62 camera tiles (50 HPWREN cameras, some replayed on more than one day) every second, at a budget of 2 alerts per camera-window.
 
 ---
 
@@ -102,7 +102,8 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > CNN detects 18 and frame differencing 20.
 >
 > **The median is on a knife edge, and that is part of the result.** It exists because exactly half
-> the fires were detected — so with misses counted as never, the median *is* the 27th and slowest
+> the fires were detected — so with misses counted as never, the median (nearest-rank,
+> `plumerank/metrics.py`) *is* the 27th and slowest
 > detection, 38.0 min, near the end of the ~40 post-ignition minutes a FIgLib sequence records; one
 > fewer detection and it would not exist. The detected fires themselves are found sooner: median
 > 10.0 min, mean 13.3 min (conditional on detection). Re-scored against an ignition clock shifted by −5…0 minutes it reads
@@ -113,9 +114,11 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > way (p = 0.18), and 17 against 10 for rebased B2 (p = 0.25); against both baselines as deployed
 > the split is 26–1 and 25–2 (p < 0.001). 14 of PlumeRank's 27 held-out detections were missed by
 > all four baselines; where both detect, rebased B1 is faster on 3 of 5 and rebased B2 on 5 of 10.
-> No held-out fire was seen before the read; the held-out cameras were seen on fire-free days, by
-> design. HOLD shares no camera with DEV (43 held-out cameras, 17 DEV cameras, none in common), but
-> 31 of the 33 fire-free confusion windows sit on held-out cameras, on non-fire days at the matched
+> No held-out window was seen before the read, but held-out is per window, not per fire or camera:
+> 6 of the 54 film four fires that DEV also films from another camera (Creelman, Scissors, Mission,
+> and the 2024-11-13 fire at dwpgm; for Scissors one held-out camera shares DEV's mast and bearing,
+> mono vs colour). HOLD shares no camera with DEV (43 held-out cameras, 17 DEV cameras, none in
+> common), but 31 of the 33 fire-free confusion windows sit on held-out cameras, one each, on non-fire days at the matched
 > time of day (`data/manifest_confuse.json`, `selection`) — and every threshold, every DEV
 > comparison made at the budget, and the class-split and registration analyses ran on them.
 >
@@ -137,7 +140,7 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 | Median time-to-detection of the detected fires (conditional) | 10.0 min | 13.0 min |
 | Alert rate | 1.99 /camera-window on the confusion set (target 2.0); 1.92 realised on HOLD | 1.99 on the confusion set; 2.37 realised on DEV |
 | Escalation fraction (frames sent to the ONNX classifier) | 1.76% — within the 2% cap | 2.14% — over the cap |
-| CNN calls per camera-window | 1.4 (PlumeRank) vs 3,645 (B1) | 1.8 vs 3,645 |
+| CNN calls per camera-window | 1.4 (PlumeRank) vs 3,645 (B1) | 1.7 vs 3,645 |
 | **B1 through the same per-camera baseline (like-for-like)** | **18 / 54 — no median** | 14 / 29 — no median |
 | **B2 through the same per-camera baseline (like-for-like)** | **20 / 54 — no median** | 10 / 29 — no median |
 | B1 as deployed (same CNN, every frame) | 2 / 54 — no median (threshold within 1e-6 of 1.0: saturated probabilities) | 6 / 29 — no median |
@@ -420,7 +423,7 @@ plumerank/       # the pipeline: stabilise, segment, statistic, escalate, rank, 
 api/             # FastAPI app — /build-info, /health, /api/watchlist, /api/benchmark
 scripts/         # fetch.py, bench.py, check_claims.py, check_submission_readiness.py
 web/             # Next.js frontend — the Wall ("/"), "/results", "/judge"
-tests/           # 833 tests, 100% line coverage on plumerank/
+tests/           # 833 collected (832 pass, 1 skipped locally), 100% line coverage on plumerank/
 deploy/          # EC2 bootstrap (Caddy, systemd, OpenCV 5 build pin)
 results/         # committed run artefacts — every published number lives here
 ```

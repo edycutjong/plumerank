@@ -18,7 +18,7 @@ This is the full walkthrough. For the 30-second version, see [`JUDGE.md`](JUDGE.
 git clone https://github.com/edycutjong/plumerank && cd plumerank
 make test      # offline suite + coverage + claim-consistency check
 make verify    # clean-venv sanity check (does NOT reproduce the published headline)
-               # measured 2026-10-10: real 124 s end to end (results/test_run_2026-10-10.txt)
+               # measured 2026-10-10: real 129 s end to end (results/test_run_2026-10-10.txt)
 ```
 
 Output of `make verify`'s final step (`scripts/bench.py --arm micro`), pasted verbatim; the full

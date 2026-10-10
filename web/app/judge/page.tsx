@@ -92,7 +92,7 @@ export default function JudgePage() {
           </li>
           <li>
             <strong>Held-out set — the headline: 27/54 detected</strong> at 2.0 alerts per
-            camera-window, ranked fire-against-fire (all 54 aligned on ignition). Median 38.0 min with
+            camera-window, ranked fire-against-fire (all 54 aligned on ignition). Nearest-rank median 38.0 min with
             misses as never — the 27th and slowest detection; the detected fires: median 10.0, mean
             13.3. Like-for-like baselines 18/54 and 20/54 (paired p = 0.18 and 0.25 — a lead, not
             significant), at 1.4 CNN calls per camera-window against 3,645 (

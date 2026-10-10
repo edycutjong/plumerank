@@ -140,12 +140,12 @@ DEV fire (18/29) than the shipped cell — disclosed, not acted on, because DEV 
 | B1 as deployed (same ONNX, every frame) | 6 / 29 detected — no median (0.46 realised on DEV; threshold within 1e-6 of 1.0 — saturated probabilities) |
 | B2 as deployed (frame differencing) | 3 / 29 detected — no median (1.84 realised on DEV) |
 
-Source: `results/arm_dev_2026-10-04.json`. DEV is the arm the fusion weights were fit on — a
+Source: `results/arm_dev_2026-10-10.json`. DEV is the arm the fusion weights were fit on — a
 number from it is diagnostic, never a claim of generalisation.
 
 **Failure cases — every DEV sequence, every system.** Minutes from ignition until the camera is
 in the top 4 *and* has fired an alert; `miss` means it never did inside the window. From
-`per_sequence` in `results/arm_dev_2026-10-04.json` — the same traces the aggregate is computed
+`per_sequence` in `results/arm_dev_2026-10-10.json` — the same traces the aggregate is computed
 from.
 
 | Sequence | PlumeRank | B1 rebased | B2 rebased | B1 deployed | B2 deployed |

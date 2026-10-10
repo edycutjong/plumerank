@@ -1,12 +1,10 @@
 # Local test and verify runs -- 2026-10-10, arm64 laptop (Apple silicon), Python 3.11, warm pip cache
 
-## make test equivalent: pytest tests -m 'not live' (commit e3936f0, full local corpus present)
-734 passed, 1 skipped in 86.63s (0:01:26)
-
-## /usr/bin/time -p make verify (code at commit 037aeaf, venv rebuilt from requirements-dev.lock)
+## /usr/bin/time -p make verify (code at commit fb20833, venv rebuilt from requirements-dev.lock)
+  pytest tests -m 'not live' -q: 832 passed, 1 skipped
   checked against: results/verify_micro.json -- MATCH (byte-for-byte)
-real 124.26
-user 113.72
-sys 9.59
+real 129.43
+user 115.95
+sys 9.86
 
-CI runs the same suite without data/corpus/: 722 passed, 13 skipped (GitHub Actions run 38030985321).
+CI runs the same suite without data/corpus/: 820 passed, 13 skipped (GitHub Actions run 38064868607, commit fb20833).
