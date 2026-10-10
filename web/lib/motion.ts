@@ -63,12 +63,22 @@ export function useFlip(keys: string[], reduced: boolean) {
     );
     const next = new Map<string, number>();
 
+    // READ every position first, then WRITE. Interleaving the two -- a
+    // getBoundingClientRect() after the previous row's transform write -- forced one
+    // synchronous layout per moved row on every tick (Lighthouse on the live box: ~0.9 s
+    // of blocking time on a throttled phone, "Style & Layout" 2.8 s of 10 s). Reading
+    // before any write gives the same tops, because nothing in this tick has moved yet.
+    const measured: Array<[HTMLElement, string, number]> = [];
     for (const node of nodes) {
       const key = node.dataset.flipKey;
       if (!key) continue;
       const top = node.getBoundingClientRect().top;
       next.set(key, top);
+      measured.push([node, key, top]);
+    }
 
+    const inverted: HTMLElement[] = [];
+    for (const [node, key, top] of measured) {
       const before = previous.current.get(key);
       if (before === undefined || Math.abs(before - top) < 1) continue;
 
@@ -96,12 +106,18 @@ export function useFlip(keys: string[], reduced: boolean) {
 
       node.classList.remove("flip-move");
       node.style.transform = `translateY(${before - top}px)`;
-      // Reading offsetHeight forces the inverted position to be committed before the
-      // transition class goes back on. Without it the browser coalesces both style
-      // changes into one recalculation and there is nothing to animate FROM.
-      void node.offsetHeight;
-      node.classList.add("flip-move");
-      node.style.transform = "";
+      inverted.push(node);
+    }
+
+    if (inverted.length > 0) {
+      // ONE forced layout commits every inverted position before the transition class
+      // goes back on. Without it the browser coalesces both style changes into one
+      // recalculation and there is nothing to animate FROM.
+      void root.offsetHeight;
+      for (const node of inverted) {
+        node.classList.add("flip-move");
+        node.style.transform = "";
+      }
     }
 
     previous.current = next;

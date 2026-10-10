@@ -57,7 +57,7 @@ function UnavailablePanel({ reason }: { reason: string }) {
 
 export default function WallPage() {
   const { meta, rows, frameIndex, warm, framesSeen, state, stale, error } = useWatchlist();
-  const { data: benchmark } = useBenchmark();
+  const { data: benchmark, loading: benchmarkLoading } = useBenchmark();
   const [selected, setSelected] = useState<WatchRow | null>(null);
 
   const compact = useMediaQuery("(max-width: 1279px)");
@@ -105,9 +105,9 @@ export default function WallPage() {
             <p style={{ color: "var(--ink-1)", margin: 0 }}>
               PlumeRank ranks a wildfire-camera network so the camera most likely showing a
               new plume reaches the top of a dispatcher&apos;s watch list — under a hard
-              budget of two alerts per camera&#8209;night, with the threshold solved on
-              fire-free windows rather than picked by hand. (A camera&#8209;night here is one
-              81-minute camera window, the length of a FIgLib sequence — not a 12-hour shift.)
+              budget of two alerts per camera&#8209;window, with the threshold solved on
+              fire-free windows rather than picked by hand. (A camera&#8209;window is 81 minutes
+              of footage on one camera, the length of a FIgLib sequence — not a 12-hour shift.)
               OpenCV 5 does the per-frame work: background modelling, optical flow and plume
               geometry, fused into one hazard and scored against each camera&apos;s own recent
               history.
@@ -124,10 +124,23 @@ export default function WallPage() {
                   min median time-to-detection
                   {benchmark.budget.target === null
                     ? ""
-                    : ` at ${benchmark.budget.target.toFixed(1)} alerts per camera-night`}
+                    : ` at ${benchmark.budget.target.toFixed(1)} alerts per camera-window`}
                   {holdSequences === null || holdExcluded === null
                     ? ", on the held-out sequences"
                     : `, on ${holdSequences} of ${holdSequences + holdExcluded} held-out sequences, ${holdExcluded} excluded`}
+                </span>
+              </p>
+            ) : benchmarkLoading ? (
+              // While /api/benchmark is in flight, hold the held-out sentence's shape: the
+              // development-set fallback below is three times longer, and swapping it out
+              // when the result landed shifted the make-verify row (Lighthouse CLS 0.126).
+              <p style={{ margin: "0 0 8px" }} aria-busy="true">
+                <span className="mono num" style={{ fontSize: "var(--size-metric-s)", color: "var(--ink-3)" }}>
+                  …
+                </span>{" "}
+                <span className="label" style={{ textTransform: "none", letterSpacing: 0 }}>
+                  min median time-to-detection at 2.0 alerts per camera-window, on the
+                  held-out sequences — loading the committed result
                 </span>
               </p>
             ) : (
@@ -138,7 +151,7 @@ export default function WallPage() {
                 <span className="label" style={{ textTransform: "none", letterSpacing: 0 }}>
                   min median time-to-detection on the development set: {count(dev.detected)} of{" "}
                   {count(dev.n)} fires detected. Threshold solved to {rate(dev.calibrationRate)}{" "}
-                  alerts per camera-night on the confusion set; {rate(dev.devRate)} realised on the
+                  alerts per camera-window on the confusion set; {rate(dev.devRate)} realised on the
                   development set. In-sample — the constants were fit on these fires (
                   <span className="mono">{DEV_RUN_FILE}</span>). The held-out result has not been
                   run yet and is the only number this project will call its headline.

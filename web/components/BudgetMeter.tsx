@@ -126,7 +126,7 @@ export function BudgetMeter({
           {totalSpent} / {totalSlots}
         </span>
         <span className="label" style={{ textTransform: "none", letterSpacing: 0 }}>
-          slots spent this camera-night, {perCamera} per camera (budget-capped)
+          slots spent this camera-window, {perCamera} per camera (budget-capped)
         </span>
       </div>
 
@@ -178,8 +178,8 @@ export function BudgetMeter({
       >
         <span className="num">
           {realised === null
-            ? `target ${target === null ? ABSENT : rate(target)} alerts per camera-night`
-            : `${rate(realised)} alerts per camera-night on the fire-free confusion set (uncapped) / target ${
+            ? `target ${target === null ? ABSENT : rate(target)} alerts per camera-window`
+            : `${rate(realised)} alerts per camera-window on the fire-free confusion set (uncapped) / target ${
                 target === null ? ABSENT : rate(target)
               }`}
         </span>

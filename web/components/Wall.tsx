@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { apiUrl } from "@/lib/api";
 import type { StreamState, WatchMeta, WatchRow } from "@/lib/types";
@@ -51,6 +51,34 @@ function TileImage({ src }: { src: string }) {
   }, [src, shown]);
   return <img src={shown} alt="" decoding="async" />;
 }
+
+/**
+ * One wall tile. Memoised on primitives: a tick re-ranks every row, but most tiles keep
+ * their frame URL, rank and dimming, and re-rendering all 62 on every tick was most of
+ * the wall's main-thread time on a throttled phone.
+ */
+const Tile = memo(function Tile({
+  cam,
+  src,
+  rank,
+  dim,
+  warmWidth,
+}: {
+  cam: string;
+  src: string | null;
+  rank: number | null;
+  dim: boolean;
+  warmWidth: number | null;
+}) {
+  return (
+    <div className={`tile${dim ? " tile--dim" : ""}`} title={cam}>
+      {src ? <TileImage src={src} /> : <span className="tile-empty">no frame published</span>}
+      {rank !== null ? <span className="tile-rank">{rank}</span> : null}
+      <span className="tile-name">{cam}</span>
+      {warmWidth !== null ? <span className="tile-warm" style={{ width: `${warmWidth * 100}%` }} /> : null}
+    </div>
+  );
+});
 
 export function Wall({
   meta,
@@ -145,8 +173,8 @@ export function Wall({
           {roster.length === 0
             ? "every camera on the roster, none removed"
             : compact
-              ? `top ${ordered.length} of ${roster.length} cameras by rank — scroll sideways for more; none removed`
-              : `all ${roster.length} cameras, none removed`}
+              ? `top ${ordered.length} of ${roster.length} camera tiles by rank — scroll sideways for more; none removed`
+              : `all ${roster.length} camera tiles, none removed`}
         </span>
       </div>
 
@@ -170,18 +198,14 @@ export function Wall({
             // dims NOTHING rather than dimming by a guessed one. See the note below.
             const dim = topK !== null && (row === undefined || row.rank > topK);
             return (
-              <div key={cam} className={`tile${dim ? " tile--dim" : ""}`} title={cam}>
-                {src ? (
-                  <TileImage src={apiUrl(src)} />
-                ) : (
-                  <span className="tile-empty">no frame published</span>
-                )}
-                {row ? <span className="tile-rank">{row.rank}</span> : null}
-                <span className="tile-name">{cam}</span>
-                {warming ? (
-                  <span className="tile-warm" style={{ width: `${warmProgress * 100}%` }} />
-                ) : null}
-              </div>
+              <Tile
+                key={cam}
+                cam={cam}
+                src={src ? apiUrl(src) : null}
+                rank={row ? row.rank : null}
+                dim={dim}
+                warmWidth={warming ? warmProgress : null}
+              />
             );
           })}
         </div>
