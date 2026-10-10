@@ -60,7 +60,9 @@ a:hover { text-decoration: underline; }
 /* A link inside running text must not rely on colour alone (WCAG 1.4.1,
  * Lighthouse link-in-text-block): /judge's bullets and the wall's `make verify`
  * note both failed it. Navigation and standalone links keep the bare style. */
-p a, li a, .label a { text-decoration: underline; text-underline-offset: 2px; }
+p a, li a, .label a, .limits-banner a { text-decoration: underline; text-underline-offset: 2px; }
+/* WCAG 2.5.8 target size: the top-bar links were 23.3 px tall at 390 px wide. */
+.topbar nav a { display: inline-flex; align-items: center; min-height: 24px; }
 
 /* One focus treatment, everywhere, in the system's own voice. Never `outline: none`:
  * the entire interactive surface of this product is the evidence modal, two copy
