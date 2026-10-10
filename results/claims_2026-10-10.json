@@ -31,7 +31,7 @@
       "status": "PASS"
     },
     {
-      "detail": "23 claimed path(s), all present",
+      "detail": "24 claimed path(s), all present",
       "misses": [],
       "name": "claimed-paths",
       "status": "PASS"
@@ -45,7 +45,7 @@
     "DEMO.md",
     "JUDGE.md"
   ],
-  "generated": "2026-10-10T20:19:20+07:00",
+  "generated": "2026-10-10T21:23:22+07:00",
   "ok": true,
   "root": ".",
   "surfaces": {
