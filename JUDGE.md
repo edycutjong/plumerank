@@ -1,10 +1,10 @@
 # For judges — the 30-second path
 
 **The claim:** PlumeRank ranks which wildfire-camera tiles a dispatcher should open next,
-calibrated to a fixed budget of 2 alerts per camera-night, and measures itself on median
-minutes-after-ignition until the right camera reaches the top of that ranking. (A *camera-night*
-here is one 81-minute window of footage on one camera — the length of a FIgLib sequence — not a
-12-hour night.)
+calibrated to a fixed budget of 2 alerts per camera-window, and measures itself on median
+minutes-after-ignition until the right camera reaches the top of that ranking. (A *camera-window*
+is 81 minutes of footage on one camera — the length of a FIgLib sequence — not a 12-hour night;
+the code calls it `camera_night`.)
 
 ## 1. Click these, in order
 
@@ -64,7 +64,7 @@ The held-out run happened once, on 2026-10-10, at commit `5df7332`:
   threshold (0.849 — the same value the DEV run solved, because it depends only on the
   confusion set).
 
-**How far to trust it.** 27 of 54 is exactly half, so the median is on a knife edge: re-scored
+**How far to trust it.** 27 of 54 is exactly half, so the (nearest-rank) median is on a knife edge: re-scored
 against an ignition clock shifted by −5…0 minutes it reads 32–38 min, and at +1…+5 minutes it
 does not exist. The detection counts — 27 against 18 and 20 for the like-for-like baselines — are
 the steadier comparison. The run executed on a local arm64 machine, not the endpoint box.

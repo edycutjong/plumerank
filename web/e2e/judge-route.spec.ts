@@ -16,7 +16,7 @@ test("GET /judge returns 200 with no credentials or session and carries the clai
   expect(response?.status()).toBe(200);
 
   await expect(
-    page.getByText(/calibrated to a fixed budget of 2 alerts per camera[-\u2011]night/i)
+    page.getByText(/calibrated to a fixed budget of 2 alerts per camera[-\u2011]window/i)
   ).toBeVisible();
 
   // The 30-second path, the receipt, the reproduce command, and the honest-limitations

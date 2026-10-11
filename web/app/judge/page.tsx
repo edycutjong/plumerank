@@ -14,7 +14,7 @@ import { count, minutes } from "@/lib/format";
 
 const CLAIM =
   "PlumeRank ranks which wildfire-camera tiles a dispatcher should open next, " +
-  "calibrated to a fixed budget of 2 alerts per camera\u2011night (one 81-minute camera " +
+  "calibrated to a fixed budget of 2 alerts per camera\u2011window (one 81-minute camera " +
   "window, the length of a FIgLib sequence), and measures itself on median minutes after " +
   "ignition until the right camera reaches the top of that ranking.";
 
@@ -129,9 +129,12 @@ make verify    # ≤ 3 min: rebuilds the venv, re-runs the suite, recomputes the
           sequences were measured — 60 in the manifest, 6 excluded by the published rule.
         </p>
         <p style={{ color: "var(--ink-1)" }}>
-          27 of 54 is exactly half, so the median is on a knife edge: against an ignition clock
-          shifted by −5 to 0 minutes it reads 32–38 minutes, and from +1 to +5 minutes it does not
-          exist. The detection counts — 27 against 18 and 20 — are the steadier comparison.
+          27 of 54 is exactly half, so the median is on a knife edge: it is nearest-rank, the 27th
+          and slowest detection; against an ignition clock shifted by −5 to 0 minutes it reads
+          32–38 minutes, and from +1 to +5 minutes it does not exist. The detection counts — 27
+          against 18 and 20 — are the steadier comparison, but not a significant one at 54 fires:
+          paired on the same fires, p = 0.18 and 0.25 (exact McNemar). What holds is cost: 1.4 CNN
+          calls per camera-window against 3,645.
         </p>
       </Section>
 
