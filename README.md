@@ -83,7 +83,7 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > fires are detected (the operating curve below). Publishing that trade-off is the point.
 >
 > **Where it would sit.** The lift comes from rebasing, not from a better detector: through the
-> same per-camera baseline, the same CNN goes from 2 to 18 held-out fires and frame differencing
+> same per-camera baseline, the same CNN goes from 2 to 18 held-out fire windows and frame differencing
 > from 4 to 20. So PlumeRank could sit on the alert stream a watcher already verifies — as a
 > calibration-and-ranking layer over any detector, not a rival detector. That is a reading of
 > these results, not a deployment we have run.
@@ -110,8 +110,8 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > 32–38 min; at +1…+5 minutes fewer than half count as detected and there is no median
 > (`results/sensitivity_2026-10-10.csv`). The detection counts are the steadier comparison — but at
 > 54 windows, not a significant one against the rebased baselines. Paired on the same windows (exact
-> McNemar, from `per_sequence`; 13 windows share a fire with another, so the pairs are not fully
-> independent and the true p is if anything larger), PlumeRank detects 22 fires rebased B1 misses against 13 the other
+> McNemar, from `per_sequence`; 22 of the 54 windows come from 9 fires that contribute 2–4 windows
+> each, so the pairs are not fully independent and the p-values are approximate), PlumeRank detects 22 windows rebased B1 misses against 13 the other
 > way (p = 0.18), and 17 against 10 for rebased B2 (p = 0.25); against both baselines as deployed
 > the split is 26–1 and 25–2 (p < 0.001). 14 of PlumeRank's 27 held-out detections were missed by
 > all four baselines; where both detect, rebased B1 is faster on 3 of 5 and rebased B2 on 5 of 10.
@@ -161,7 +161,7 @@ each budget's threshold solved on the same confusion set):
 |---|---|---|---|---|---|
 | PlumeRank median TTD (misses = never) | no median | no median | **38.0 min** | 15.0 min | 13.0 min |
 
-Below 2 alerts per window fewer than half the held-out fires are detected; doubling the budget to
+Below 2 alerts per window fewer than half the held-out fire windows are detected; doubling the budget to
 4 more than halves the median. `operating_curve` was computed at the single held-out read with
 medians only, and only for the as-deployed baselines (no median at any budget); per-budget
 detection counts and the rebased baselines' curve were not computed then, and HOLD is not re-read

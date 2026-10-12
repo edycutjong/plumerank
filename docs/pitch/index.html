@@ -211,11 +211,11 @@ body.overview .grid-view { display: grid; }
   <aside class="speaker-notes">PlumeRank decides which camera a fire dispatcher looks at first. The frame here is real: the Border58 Fire, a development-set fire, eight minutes after ignition, the minute PlumeRank detected it. Neither baseline detected it within the window.</aside>
 </section>
 
-<section class="slide s2" data-title="04:50, one dispatcher">
+<section class="slide s2" data-title="14:50, one dispatcher">
   <div class="kicker">The scene</div>
   <h2>One dispatcher.<br>A wall of tiles.<br><span class="hot">Which first?</span></h2>
   <p class="body">ALERTCalifornia alone runs <b>more than 1,200 cameras</b>. A human opens a few per minute and mutes anything that interrupts too often.</p>
-  <div class="clock">04:50<small>NEXT SIXTY SECONDS</small></div>
+  <div class="clock">14:50<small>NEXT SIXTY SECONDS</small></div>
   <div class="wall" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="lit"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="foot"><span>The problem</span><b>02 / 10</b></div>
   <aside class="speaker-notes">The bottleneck is not detection, it is attention. One person, a wall of tiles, and a hard limit on how many interruptions they will tolerate before they stop listening.</aside>
@@ -258,7 +258,7 @@ body.overview .grid-view { display: grid; }
   </div>
   <p class="aws"><b>AWS</b> · one t4g.small Graviton · S3 corpus · CloudWatch drift ±15% + heartbeat reboot</p>
   <div class="foot"><span>Mechanism</span><b>05 / 10</b></div>
-  <aside class="speaker-notes">OpenCV 5 does every per-frame step. The step that carries the ranking is the fifth: a camera that runs hot all night is not a fire, so each camera is z-scored against its own last fifteen minutes before one threshold is solved to spend the budget.</aside>
+  <aside class="speaker-notes">OpenCV 5 does every per-frame step. The step that carries the ranking is the fifth: a camera that runs hot all afternoon is not a fire, so each camera is z-scored against its own last fifteen minutes before one threshold is solved to spend the budget.</aside>
 </section>
 
 <section class="slide s6" data-title="Live on AWS">
@@ -266,7 +266,7 @@ body.overview .grid-view { display: grid; }
   <h2>62 camera tiles. <span class="hot">Nothing hidden.</span></h2>
   <div class="shot"><div class="bar">live.plumerank.edycu.dev / the wall · captured 10 Oct 2026</div><img src="../assets/live-wall.webp" alt="The live PlumeRank wall with 62 camera tiles and a ranked watch list"></div>
   <div class="side">
-    <div class="row"><b>29 + 33</b><span>development fires + fire-free windows</span></div>
+    <div class="row"><b>29 + 33</b><span>development fire windows + fire-free windows</span></div>
     <div class="row"><b>1 s / tick</b><span>one minute of footage, re-ranked</span></div>
     <div class="row"><b>0 removed</b><span>the list only reorders</span></div>
   </div>
@@ -275,7 +275,7 @@ body.overview .grid-view { display: grid; }
 </section>
 
 <section class="slide s7" data-title="Results">
-  <div class="kicker">Held-out · 54 fires · read once · same budget</div>
+  <div class="kicker">Held-out · 54 fire windows · read once · same budget</div>
   <h2>Same model. <span class="hot">Asked less often.</span></h2>
   <div class="bars">
     <div class="bar pr"><div class="top">PlumeRank<span>27 / 54</span></div><div class="tr"><div class="fi" style="width:50%"></div></div></div>
@@ -284,10 +284,10 @@ body.overview .grid-view { display: grid; }
     <div class="bar"><div class="top">B2 · frame differencing<span>4 / 54</span></div><div class="tr"><div class="fi" style="width:7.4%"></div></div></div>
     <div class="bar"><div class="top">B1 · CNN on every frame<span>2 / 54</span></div><div class="tr"><div class="fi" style="width:3.7%"></div></div></div>
   </div>
-  <div class="big"><b>38.0</b><p>minutes, median time to detection over all 54 fires, misses counted as never. Only PlumeRank reaches a median, and only just.</p></div>
+  <div class="big"><b>38.0</b><p>minutes, median time to detection over all 54 windows, misses counted as never. Only PlumeRank reaches a median, and only just.</p></div>
   <p class="note">CNN calls per camera-window: PlumeRank 1.4 · B1 3,645 · results/bench_2026-10-10.json</p>
   <div class="foot"><span>Results</span><b>07 / 10</b></div>
-  <aside class="speaker-notes">These are the held-out fires, read once after the freeze. B1 is our own ONNX classifier on every frame, so the gap is the pipeline, not the model. Twenty-seven of fifty-four is exactly half: the median is fragile, so lean on the counts.</aside>
+  <aside class="speaker-notes">These are the held-out fire windows, read once after the freeze. B1 is our own ONNX classifier on every frame, so the gap is the pipeline, not the model. Twenty-seven of fifty-four is exactly half: the median is fragile, so lean on the counts.</aside>
 </section>
 
 <section class="slide s8" data-title="Held-out discipline">
@@ -298,9 +298,9 @@ body.overview .grid-view { display: grid; }
     <div class="r"><b>Logged reads</b><p>Every read of held-out pixels appends one line, with the commit.</p><code>results/hold_access.log</code></div>
     <div class="r"><b>Verified frames</b><p>Every frame must hash to the fetch receipt before the read counts.</p><code>data/fetch_receipt.json</code></div>
   </div>
-  <p class="lim"><b>Known limits:</b> half the held-out fires missed · median fragile to the ignition clock · daylight only · cloud, not fog, is the adversary</p>
+  <p class="lim"><b>Known limits:</b> half the held-out fire windows missed · median fragile to the ignition clock · daylight only · cloud, not fog, is the adversary</p>
   <div class="foot"><span>Trust</span><b>08 / 10</b></div>
-  <aside class="speaker-notes">We built the honesty into the code. The 54 measured held-out fires were read exactly once, after the freeze, and the README lists the limits in our own words, including that cloud, not fog, is what costs the budget.</aside>
+  <aside class="speaker-notes">We built the honesty into the code. The 54 measured held-out fire windows were read exactly once, after the freeze, and the README lists the limits in our own words, including that cloud, not fog, is what costs the budget.</aside>
 </section>
 
 <section class="slide s9" data-title="Engineering">

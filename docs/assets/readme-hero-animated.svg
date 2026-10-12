@@ -53,7 +53,7 @@
  <g class="pulse"><rect x="40" y="182" width="11" height="11" rx="2" fill="#FFB020"/><rect x="56.5" y="182.5" width="10" height="10" rx="2" fill="none" stroke="#56646F" stroke-width="1.5"/>
  <text x="78" y="192" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14" font-weight="700" letter-spacing=".5" fill="#FFB020">2 ALERTS PER CAMERA-WINDOW · FIXED BUDGET</text></g>
  <rect id="devtagbox" x="40.5" y="208.5" width="42" height="17" rx="3" fill="none" stroke="#243140"/><text id="devtagtext" x="61.5" y="221" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1" fill="#8595A6">HOLD</text>
- <text id="devfull1" x="92" y="221" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" fill="#C6D2DE">27/54 held-out fires detected · p50 38.0 min</text>
+ <text id="devfull1" x="92" y="221" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" fill="#C6D2DE">27/54 held-out fire windows detected · p50 38.0 min</text>
  <text id="devfull2" x="92" y="239" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" fill="#8595A6">read once after the freeze · like-for-like baselines 18/54, 20/54</text>
  <text id="devcompact" x="40" y="226" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="24" font-weight="700" letter-spacing=".3" fill="#C6D2DE">HOLD 27/54 · p50 38.0 min</text>
  <text x="40" y="287" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" letter-spacing=".4" fill="#8595A6">OpenCV 5 · cv2.dnn · AWS Graviton</text>
