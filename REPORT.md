@@ -194,7 +194,7 @@ What the rows say, plainly:
 **Failure cases — every held-out sequence, every system.** Same definition, from `per_sequence` in
 `results/bench_2026-10-10.json` (the single held-out read). All 54 windows are aligned on their
 ignition frame and ranked together, tick by tick (`scripts/bench.py`, `alert_trace`): from ignition
-onward the top 4 is contested by 54 simultaneous fires, for every system alike.
+onward the top 4 is contested by 54 simultaneously burning windows, for every system alike.
 
 | Sequence | PlumeRank | B1 rebased | B2 rebased | B1 deployed | B2 deployed |
 |---|---|---|---|---|---|
