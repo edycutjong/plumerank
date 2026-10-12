@@ -71,9 +71,9 @@ skipped, 100% line coverage on `plumerank/`, ~2 min, no network, no credentials.
 
 ```bash
 make fetch   # ~35 min: the corpus, sha256-verified, resumable
-make bench   # 12m29s on the arm64 machine that produced results/bench_2026-10-10.json (budget up to an hour on a small instance)
+make bench   # 12m29s on the arm64 machine that produced results/bench_2026-10-10.json (not yet timed on a small instance)
 # the ablation grid is its own DEV run, quoted by the held-out file:
-.venv/bin/python scripts/bench.py --arm dev --ablation   # twelve cells, a few hours, off the box
+.venv/bin/python scripts/bench.py --arm dev --ablation   # twelve cells, ~65 min per-cell wall clock, off the box
 ```
 
 Nobody needs to run this to evaluate the submission — `results/` already carries every

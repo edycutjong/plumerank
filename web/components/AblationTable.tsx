@@ -40,7 +40,7 @@ export function AblationTable({ data }: { data: Benchmark }) {
       {constant.length > 0 ? (
         <p className="mono" style={{ color: "var(--ink-2)", fontSize: "var(--size-label)", margin: "0 0 8px", overflowWrap: "anywhere" }}>
           same on every row:{" "}
-          {constant.map(({ c, v }) => `${c.replace(/_/g, " ")} ${c === "commit" ? String(v).slice(0, 7) : v}`).join(" · ")}
+          {constant.map(({ c, v }) => `${label(c)} ${c === "commit" ? String(v).slice(0, 7) : v}`).join(" · ")}
         </p>
       ) : null}
       <div className="scroll-x card">
@@ -48,7 +48,7 @@ export function AblationTable({ data }: { data: Benchmark }) {
           <thead>
             <tr>
               {varying.map(({ c }) => (
-                <th key={c}>{c.replace(/_/g, " ")}</th>
+                <th key={c}>{label(c)}</th>
               ))}
             </tr>
           </thead>
@@ -67,6 +67,12 @@ export function AblationTable({ data }: { data: Benchmark }) {
       </div>
     </>
   );
+}
+
+/** CSV column names, readable. The code's unit is `camera_night`; every page calls it a
+ *  camera-window (81 minutes on one camera), so the header does too. */
+function label(column: string): string {
+  return column.replace(/camera_night/g, "camera-window").replace(/_/g, " ");
 }
 
 /** The design cells first, then what they produced; anything unknown keeps file order after. */

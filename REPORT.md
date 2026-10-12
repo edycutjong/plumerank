@@ -8,7 +8,7 @@ competition's required deliverables list asks for, in one place.
 ## 1. Problem
 
 Wildfire camera networks (ALERTWildfire, HPWREN, Pyronear) now carry thousands of live tiles,
-watched by one or two people per shift. Published smoke detectors are scored on **per-frame
+far more than the people on shift can watch at once. Published smoke detectors are scored on **per-frame
 accuracy** (F1, precision, recall) or on time-to-detection with no cap on false alarms. Neither
 number tells a dispatcher which of a thousand
 tiles to open next, and none of it tells a procurement officer whether the system will survive
