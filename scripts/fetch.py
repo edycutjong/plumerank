@@ -48,9 +48,9 @@ pins what an archive served, and a derived tree is not that.
 
 Usage::
 
-    python scripts/fetch.py --corpus figlib     # DEV + HOLD + CONFUSE, then build micro
-    python scripts/fetch.py --corpus pyrosdis   # the tile classifier's training mirror
-    python scripts/fetch.py --corpus all        # both; what `make fetch` runs
+    python scripts/fetch.py --corpus figlib     # DEV + HOLD + CONFUSE, then build micro; what `make fetch` runs
+    python scripts/fetch.py --corpus pyrosdis   # the tile classifier's training mirror (retraining only)
+    python scripts/fetch.py --corpus all        # both
 """
 
 from __future__ import annotations

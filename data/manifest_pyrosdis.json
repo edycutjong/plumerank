@@ -5,7 +5,7 @@
   "source": "Pyro-SDIS (pyronear/pyro-sdis on HuggingFace), revision a1e553ec4d806f71fc6db744cc22bc3469487382",
   "credit": "Pyro-SDIS, Pyronear association with the French Fire and Rescue Services (SDIS), https://huggingface.co/datasets/pyronear/pyro-sdis",
   "licence_note": "Apache-2.0. This is the ONLY corpus the tile classifier is ever trained on. It is French, and the evaluation arms are Californian HPWREN, which is what makes every published FIgLib number cross-network out-of-sample by construction rather than by assertion.",
-  "base_url": "https://huggingface.co/datasets/pyronear/pyro-sdis/resolve/main/",
+  "base_url": "https://huggingface.co/datasets/pyronear/pyro-sdis/resolve/a1e553ec4d806f71fc6db744cc22bc3469487382/",
   "url_note": "Shard URL = base_url + sequence_id + '/' + frame. sequence_id is the dataset's own 'data' directory, so the local tree mirrors the remote one and a shard can be checked against the dataset page by path.",
   "local_root": "pyrosdis",
   "catalogue": "33,636 annotated 1280x720 frames from Pyronear cameras: 29,537 train and 4,099 val, published as six train parquet shards and one val shard, 3.3 GB in total.",

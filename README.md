@@ -371,8 +371,8 @@ make verify             # ≤3 min: rebuilds .venv, runs the offline suite, then
                          # the micro-corpus metrics and checks them against the committed
                          # results/verify_micro.json. Does NOT reproduce the published
                          # headline and never claims to.
-make fetch && make bench  # ~95 min total: the pair that reproduces the held-out headline
-                           # (results/bench_2026-10-10.json, committed)
+make fetch && make bench  # ~95 min total (fetch ~80 min measured, bench 12m29s): the pair that
+                           # reproduces the held-out headline (results/bench_2026-10-10.json)
 ```
 
 See [`DEMO.md`](DEMO.md) for the full reproduce walkthrough and [`JUDGE.md`](JUDGE.md) for the

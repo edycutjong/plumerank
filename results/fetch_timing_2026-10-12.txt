@@ -1,0 +1,29 @@
+# Timed `make fetch` from a fresh clone -- 2026-10-12, arm64 laptop, residential connection (Asia-Pacific, far from the HPWREN CDN)
+
+clone: https://github.com/edycutjong/plumerank at fa4e7c1; venv + pip install -r requirements-dev.lock: 28 s
+
+## run 1 -- 08:50Z, /usr/bin/time -p make fetch (then `--corpus all`)
+http.client.IncompleteRead: IncompleteRead(278086 bytes read, 347708 more expected)
+make: *** [fetch] Error 1
+real 1389.43            # a body truncated mid-transfer escaped the retry loop (fixed in b04d3ae)
+
+## run 2 -- 09:14Z, same clone, fetch.py with the fix; resumes (on-disk frames re-hashed, not re-fetched)
+FAILED  manifest_pyrosdis.json: .../resolve/main/data/train-00005-of-00006.parquet -> HTTP 404
+manifest_dev.json          2409 files        2 downloaded     2407 verified        0 adopted      0 MISMATCH
+manifest_hold.json         4827 files     4827 downloaded        0 verified        0 adopted      0 MISMATCH
+manifest_confuse.json      2673 files     2673 downloaded        0 verified        0 adopted      0 MISMATCH
+real 3477.99
+
+## result
+Evaluation corpus (FIgLib DEV + HOLD + MTA CONFUSE, 9,909 frames, 4.4 GB on disk): 0 MISMATCH against
+data/fetch_receipt.json, 4,867 s of wall clock across the two runs (~81 min).
+
+Pyro-SDIS (the tile classifier's training mirror) failed: the dataset was re-sharded on HuggingFace
+on 2026-09-23 (3 train shards instead of 6), so resolve/main/ no longer serves the pinned files. The
+manifest now downloads from the pinned revision a1e553e, which still serves them (HTTP 206 on a range
+request, 2026-10-12). `make fetch` now fetches only the evaluation corpus, because make bench never
+reads Pyro-SDIS (the classifier is committed as models/tile_classifier.onnx).
+
+`make fetch && make bench` therefore takes ~81 min + 12m29s (results/bench_2026-10-10.json
+run.wall_clock_seconds 749.9) = ~95 min on this connection. A machine near the US West Coast CDN
+should be faster; that has not been measured.

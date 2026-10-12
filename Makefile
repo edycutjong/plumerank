@@ -4,8 +4,8 @@
 # script that already exists. A sixth target is a scope change,
 # and scripts/check_claims.py asserts that every target the docs mention lives here.
 #
-#   make fetch       the corpus, sha256-verified, resumable            (~35 min)
-#   make bench       the full held-out evaluation                      (~60 min)
+#   make fetch       the evaluation corpus, sha256-verified, resumable (~80 min measured)
+#   make bench       the full held-out evaluation                      (12m29s measured)
 #   make test        offline suite, no network, no credentials         (~2 min)
 #   make test-live   the two external-side-effect tests + determinism
 #   make verify      THE JUDGE ONE-LINER: clean clone -> numbers       (<=3 min)
@@ -18,8 +18,10 @@ VENV := .venv
 
 .PHONY: fetch bench test test-live verify
 
+# FIgLib + MTA only: bench never reads the Pyro-SDIS training mirror (the classifier is
+# committed as models/tile_classifier.onnx). Retraining: scripts/fetch.py --corpus pyrosdis.
 fetch:
-	$(PY) scripts/fetch.py --corpus all
+	$(PY) scripts/fetch.py --corpus figlib
 
 bench:
 	$(PY) scripts/bench.py --arm hold --budget 2.0 --sensitivity --seed 20261026

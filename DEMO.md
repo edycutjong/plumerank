@@ -70,7 +70,7 @@ skipped, 100% line coverage on `plumerank/`, ~2 min, no network, no credentials.
 ### The pair that reproduces the published headline
 
 ```bash
-make fetch   # ~35 min: the corpus, sha256-verified, resumable
+make fetch   # ~80 min (measured 2026-10-12): the evaluation corpus, sha256-verified, resumable
 make bench   # 12m29s on the arm64 machine that produced results/bench_2026-10-10.json (not yet timed on a small instance)
 # the ablation grid is its own DEV run, quoted by the held-out file:
 .venv/bin/python scripts/bench.py --arm dev --ablation   # twelve cells, ~65 min summed per-cell wall clock (4.5–6.9 min each), off the box
