@@ -537,7 +537,7 @@ def check_special_awards(submission: pathlib.Path | None, config: Config) -> Che
 
 
 #: The one sentence this project must never contain. ``make verify`` runs the ~400-frame
-#: micro corpus in three minutes; the published number is 60 held-out sequences and takes
+#: micro corpus in three minutes; the published number is 54 held-out sequences (60 in the manifest) and takes
 #: ``make fetch && make bench``, ~95 minutes. A judge who runs the three-minute command
 #: expecting the headline gets a different p50 and concludes the headline does not
 #: reproduce -- which turns the strongest asset in the project into its most attackable

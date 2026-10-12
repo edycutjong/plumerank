@@ -206,7 +206,7 @@ body.overview .grid-view { display: grid; }
     <div class="lens"><img src="../assets/border58-p08.webp" alt="Real HPWREN frame, Border58 Fire, eight minutes after ignition, with a smoke plume on the horizon"></div>
     <div class="ledger"><span>T+08:00</span><span class="st">detected · dev fire</span><span class="sl"><i class="on"></i><i></i></span></div>
   </div>
-  <div class="foot"><span>PlumeRank · lookout log</span><b>01 / 10</b></div>
+  <div class="foot"><span>PlumeRank · lookout log · imagery HPWREN FIgLib</span><b>01 / 10</b></div>
   <aside class="speaker-notes">PlumeRank decides which camera a fire dispatcher looks at first. The frame here is real: the Border58 Fire, a development-set fire, eight minutes after ignition, the minute PlumeRank detected it. Neither baseline detected it within the window.</aside>
 </section>
 
@@ -240,7 +240,7 @@ body.overview .grid-view { display: grid; }
     <div class="f alert"><div class="im"><img src="../assets/border58-p08.webp" alt="Eight minutes after ignition, smoke visible"></div><div class="t">T+08</div><div class="d">PlumeRank detects</div><div class="sl"><i class="on"></i><i></i></div></div>
     <div class="f"><div class="im"><img src="../assets/border58-p20.webp" alt="Twenty minutes after ignition"></div><div class="t">T+20</div><div class="d">B1, B2: no detection</div><div class="sl"><i class="on"></i><i></i></div></div>
   </div>
-  <div class="foot"><span>Source · results/arm_dev_2026-10-04.json</span><b>04 / 10</b></div>
+  <div class="foot"><span>Source · results/arm_dev_2026-10-10.json · imagery HPWREN FIgLib</span><b>04 / 10</b></div>
   <aside class="speaker-notes">These are real HPWREN frames. PlumeRank detected it at plus eight minutes: the camera reached its top four with an alert. The same CNN on every frame, and frame differencing, never detected this fire within the window.</aside>
 </section>
 
@@ -262,15 +262,15 @@ body.overview .grid-view { display: grid; }
 
 <section class="slide s6" data-title="Live on AWS">
   <div class="kicker">Demo · live on the Graviton box</div>
-  <h2>62 cameras. <span class="hot">Nothing hidden.</span></h2>
+  <h2>62 camera tiles. <span class="hot">Nothing hidden.</span></h2>
   <div class="shot"><div class="bar">live.plumerank.edycu.dev / the wall · captured 10 Oct 2026</div><img src="../assets/live-wall.webp" alt="The live PlumeRank wall with 62 camera tiles and a ranked watch list"></div>
   <div class="side">
     <div class="row"><b>29 + 33</b><span>development fires + fire-free windows</span></div>
     <div class="row"><b>1 s / tick</b><span>one minute of footage, re-ranked</span></div>
     <div class="row"><b>0 removed</b><span>the list only reorders</span></div>
   </div>
-  <div class="foot"><span>https://live.plumerank.edycu.dev</span><b>06 / 10</b></div>
-  <aside class="speaker-notes">This is the real endpoint: the pipeline replays FIgLib footage and re-ranks all 62 cameras every second over server-sent events. Every ranked entry carries its evidence crop so a human can overrule it at a glance.</aside>
+  <div class="foot"><span>https://live.plumerank.edycu.dev · imagery HPWREN FIgLib</span><b>06 / 10</b></div>
+  <aside class="speaker-notes">This is the real endpoint: the pipeline replays FIgLib footage and re-ranks all 62 camera tiles (50 cameras) every second over server-sent events. Every ranked entry carries its evidence crop so a human can overrule it at a glance.</aside>
 </section>
 
 <section class="slide s7" data-title="Results">

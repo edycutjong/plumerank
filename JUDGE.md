@@ -67,7 +67,7 @@ The held-out run happened once, on 2026-10-10, at commit `5df7332`:
 **How far to trust it.** 27 of 54 is exactly half, so the (nearest-rank) median is on a knife edge: re-scored
 against an ignition clock shifted by −5…0 minutes it reads 32–38 min, and at +1…+5 minutes it
 does not exist. The detection counts — 27 against 18 and 20 for the like-for-like baselines — are
-the steadier comparison, but not a significant one at 54 fires (paired, exact McNemar p = 0.18 and
+the steadier comparison, but not a significant one at 54 windows (paired, exact McNemar p = 0.18 and
 0.25); the cost gap — 1.4 CNN calls per camera-window against 3,645 — is. The run executed on a local arm64 machine, not the endpoint box.
 
 ## 5. Honest limitations

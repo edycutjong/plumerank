@@ -3,7 +3,7 @@
 
   <h1>PlumeRank 🔥📷</h1>
   <p><em>A wall of wildfire cameras. One dispatcher. Which one gets opened next?</em></p>
-  <img src="docs/assets/readme-hero-animated.svg" alt="PlumeRank — ranks wildfire cameras against their own quiet night at 2 alerts per camera-window; schematic wall and watch list, with the held-out result 27/54 detected, p50 38.0 min" width="100%">
+  <img src="docs/assets/readme-hero-animated.svg" alt="PlumeRank — ranks wildfire cameras against their own recent baseline at 2 alerts per camera-window; schematic wall and watch list, with the held-out result 27/54 detected, p50 38.0 min" width="100%">
 
   <br/>
 
@@ -92,7 +92,7 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 
 ## What it actually measures
 
-> **The headline — held-out, read once.** On the **54 held-out FIgLib fires** (60 in
+> **The headline — held-out, read once.** On the **54 held-out FIgLib fire windows** (41 distinct fires; 60 in
 > `data/manifest_hold.json`, 6 excluded by the published rule in `data/excluded.json`) — sequences
 > no constant was fit on, read exactly once after the constants were frozen
 > (`results/constants.sha256`, `results/hold_access.log`) — PlumeRank detected **27 of 54**, a
@@ -109,8 +109,9 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 > 10.0 min, mean 13.3 min (conditional on detection). Re-scored against an ignition clock shifted by −5…0 minutes it reads
 > 32–38 min; at +1…+5 minutes fewer than half count as detected and there is no median
 > (`results/sensitivity_2026-10-10.csv`). The detection counts are the steadier comparison — but at
-> 54 fires, not a significant one against the rebased baselines. Paired on the same fires (exact
-> McNemar, from `per_sequence`), PlumeRank detects 22 fires rebased B1 misses against 13 the other
+> 54 windows, not a significant one against the rebased baselines. Paired on the same windows (exact
+> McNemar, from `per_sequence`; 13 windows share a fire with another, so the pairs are not fully
+> independent and the true p is if anything larger), PlumeRank detects 22 fires rebased B1 misses against 13 the other
 > way (p = 0.18), and 17 against 10 for rebased B2 (p = 0.25); against both baselines as deployed
 > the split is 26–1 and 25–2 (p < 0.001). 14 of PlumeRank's 27 held-out detections were missed by
 > all four baselines; where both detect, rebased B1 is faster on 3 of 5 and rebased B2 on 5 of 10.
@@ -124,15 +125,15 @@ suppresses a camera and never dispatches an engine. It reorders human attention.
 >
 > **How the headline ranks.** `scripts/bench.py` aligns all 54 held-out windows on their ignition
 > frame and ranks them together, tick by tick: from ignition onward the top four — and the two
-> escalation slots per tick — are contested by 54 simultaneous fires. That is a fire-against-fire
+> escalation slots per tick — are contested by 54 simultaneously burning windows. That is a fire-against-fire
 > test, the same for every system, and harder than a live wall where fires are rare.
 >
 > **What holds against the every-frame CNN is cost.** The detection lead over rebased B1 is not
-> significant at 54 fires; the cost gap is. Per frame the classical stage runs p50 6.5 ms against
+> significant at 54 windows; the cost gap is. Per frame the classical stage runs p50 6.5 ms against
 > 53.6 ms for the CNN grid (`latency_ms`), and PlumeRank makes 1.4 CNN calls per camera-window
 > against 3,645.
 
-| Metric | **HOLD — the headline** (54 fires) | DEV — tuning arm, in-sample (29 fires) |
+| Metric | **HOLD — the headline** (54 windows, 41 fires) | DEV — tuning arm, in-sample (29 windows, 28 fires) |
 |---|---|---|
 | PlumeRank detected | **27 / 54** | 17 / 29 |
 | Median time-to-detection (misses = never) | **38.0 min** | 32.0 min |
@@ -271,7 +272,7 @@ What lifts detection is the per-camera baseline below, not the per-frame score.
 
 Those four fold into a per-camera hazard (a fixed logistic, weights fit on DEV, no presence
 term). Each camera is then scored against **its own trailing 15 minutes** — a camera that runs
-hot all night is not a fire — before a solver calibrates the alert threshold to the budget.
+hot all afternoon is not a fire — before a solver calibrates the alert threshold to the budget.
 
 **The learned component never sees a Californian pixel.** The one trained model — a small ONNX
 tile classifier reached through `cv2.dnn` — is trained only on Pyro-SDIS (French fire services,

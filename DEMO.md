@@ -82,7 +82,7 @@ commit `5df7332`, `plumerank/` has changed only in docstrings and in how the evi
 drawn (`EVIDENCE_RENDER_SCALE`, rendering only — nothing reaches a hazard, a rank or a
 threshold), and `api/` only in how the wall is served (`git diff --stat 5df7332..HEAD --
 plumerank/ api/`). The one pre-read fix to `plumerank/statistic.py` (the x86-64 DIS guard,
-`09d816d`, 05:09Z) landed before `5df7332` and before the 05:37Z read. It exists so the number
+`09d816d`, 05:09Z) landed before `5df7332` and before the run that started at 05:37Z (HOLD read logged 05:41Z). It exists so the number
 is checkable, not just assertable.
 
 ## The held-out receipt

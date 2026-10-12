@@ -6,8 +6,8 @@ why; this page is how it is built.
 ```mermaid
 flowchart TB
     subgraph SRC["Data -- fetched once, by committed manifest"]
-        FIG["HPWREN FIgLib<br/>DEV 30 . HOLD 60 . CONFUSE 33 windows<br/>credit: hpwren.ucsd.edu"]
-        PYR["Pyro-SDIS (Apache-2.0)<br/>29.5k train / 4.1k val<br/>the ONLY training data"]
+        FIG["HPWREN FIgLib<br/>DEV 30 (29 measured) . HOLD 60 (54 measured) . CONFUSE 33 windows<br/>credit: hpwren.ucsd.edu"]
+        PYR["Pyro-SDIS (Apache-2.0)<br/>24.8k frames: 77.4k train / 12.0k val tiles<br/>the ONLY training data"]
     end
 
     S3B["S3 -- one bucket, one prefix<br/>corpus/"]

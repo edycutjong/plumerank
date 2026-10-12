@@ -1,4 +1,4 @@
-"""Build the 45-window CONFUSE arm: the false-alarm denominator the threshold is solved on.
+"""Build the CONFUSE arm (45-window quota; 33 realised, see manifest_confuse.json): the false-alarm denominator the threshold is solved on.
 
 A confusion set is not a bag of pretty non-fires. It is the *denominator* of the operating
 point -- ``rank.solve_threshold`` bisects on this arm until the realised rate hits 2.0

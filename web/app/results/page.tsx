@@ -79,8 +79,8 @@ function DevelopmentEvidence() {
       <p style={{ color: "var(--ink-1)", margin: "0 0 4px", maxWidth: 760 }}>
         {count(d.detected)} of {count(d.n)} development fires detected, median{" "}
         {minutes(d.p50)} min after ignition, under a budget of{" "}
-        {rate(DEV_RUN.budget.target, 1)} alerts per camera&#8209;night — here a
-        camera&#8209;night is one 81-minute camera window, the length of a FIgLib sequence.
+        {rate(DEV_RUN.budget.target, 1)} alerts per camera&#8209;window — one 81-minute camera window, the length of a FIgLib
+        sequence.
         Source: <span className="mono">{DEV_RUN_FILE}</span>.
       </p>
 

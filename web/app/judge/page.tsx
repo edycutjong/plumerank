@@ -132,7 +132,7 @@ make verify    # ≤ 3 min: rebuilds the venv, re-runs the suite, recomputes the
           27 of 54 is exactly half, so the median is on a knife edge: it is nearest-rank, the 27th
           and slowest detection; against an ignition clock shifted by −5 to 0 minutes it reads
           32–38 minutes, and from +1 to +5 minutes it does not exist. The detection counts — 27
-          against 18 and 20 — are the steadier comparison, but not a significant one at 54 fires:
+          against 18 and 20 — are the steadier comparison, but not a significant one at 54 windows:
           paired on the same fires, p = 0.18 and 0.25 (exact McNemar). What holds is cost: 1.4 CNN
           calls per camera-window against 3,645.
         </p>
