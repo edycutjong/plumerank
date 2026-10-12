@@ -58,6 +58,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import hashlib
+import http.client
 import json
 import os
 import pathlib
@@ -236,7 +237,10 @@ def fetch_with_retry(url: str, attempts: int = RETRY_ATTEMPTS) -> bytes:
             if exc.code < 500:
                 raise FetchError(f"{url} -> HTTP {exc.code}") from exc
             last = exc
-        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        # http.client.HTTPException is not an OSError: a body cut off mid-transfer raises
+        # IncompleteRead, which escaped this loop and killed a fresh-clone `make fetch`
+        # 23 minutes in (2026-10-12). A truncated body is the most transient failure there is.
+        except (urllib.error.URLError, TimeoutError, OSError, http.client.HTTPException) as exc:
             last = exc
         if attempt + 1 < attempts:
             time.sleep(RETRY_BACKOFF_SECONDS * (2**attempt))

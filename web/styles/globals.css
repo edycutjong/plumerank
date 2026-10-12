@@ -556,6 +556,9 @@ tbody tr:last-child td { border-bottom: 0; }
 .dot--idle { background: var(--ink-3); }
 .dot--down { background: var(--alert); }
 
+/* Keyboard focus must not land under the fixed limits banner at the bottom. */
+html { scroll-padding-bottom: 72px; }
+
 .limits-banner {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
   background: var(--surface);

@@ -16,6 +16,13 @@ export function rate(v: number | null, digits = 2): string {
   return v === null ? ABSENT : v.toFixed(digits);
 }
 
+/** Model calls: "3,645" and "0", as every document writes them; 1.4 keeps its decimal. */
+export function calls(v: number | null): string {
+  if (v === null) return ABSENT;
+  if (v === 0) return "0";
+  return v >= 100 ? Math.round(v).toLocaleString("en-US") : v.toFixed(1);
+}
+
 export function percent(v: number | null, digits = 1): string {
   return v === null ? ABSENT : `${(v * 100).toFixed(digits)}%`;
 }

@@ -189,6 +189,7 @@ body.overview .grid-view { display: grid; }
   .slide { position: relative; display: block !important; width: 1920px; height: 1080px; page-break-after: always; break-after: page; break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; animation: none; }
   .ui, .ver, .notes-panel, .grid-view, .speaker-notes { display: none !important; }
 }
+@media (max-width: 640px) { .ver { display: none; } }
 @media (prefers-reduced-motion: reduce) { .ticks, .slide.on { animation: none; } }
 </style>
 </head>

@@ -9,7 +9,7 @@ import { ReproduceBlock } from "@/components/ReproduceBlock";
 import { SensitivityStrip } from "@/components/SensitivityStrip";
 import { TopBar } from "@/components/TopBar";
 import { DEV_RUN, DEV_RUN_FILE, DEV_SUMMARY } from "@/lib/devRun";
-import { ABSENT, count, minutes, percent, rate } from "@/lib/format";
+import { ABSENT, calls, count, minutes, percent, rate } from "@/lib/format";
 import { useBenchmark } from "@/lib/useBenchmark";
 import { useEffect } from "react";
 
@@ -292,7 +292,7 @@ export default function ResultsPage() {
                           <td className="mono" style={{ fontWeight: 400 }}>{rate(s.alerts_per_camera_night)}</td>
                           <td className="mono" style={{ fontWeight: 400 }}>{rate(s.arm_alerts_per_camera_night)}</td>
                           <td className="mono" style={{ fontWeight: 400 }}>
-                            {rate(s.model_invocations_per_camera_night, 1)}
+                            {calls(s.model_invocations_per_camera_night)}
                           </td>
                         </tr>
                       ))

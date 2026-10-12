@@ -1,5 +1,6 @@
 "use client";
 
+import { BufferedImg } from "@/components/BufferedImg";
 import { apiUrl } from "@/lib/api";
 import { useFlip, usePrefersReducedMotion } from "@/lib/motion";
 import type { StreamState, WatchMeta, WatchRow } from "@/lib/types";
@@ -148,7 +149,7 @@ export function WatchList({
                   data-flip-key={row.camera_id}
                   className={[
                     "row",
-                    row.rank === 1 ? "row--one" : "",
+                    row.rank === 1 && row.hazard > 0 ? "row--one" : "",
                     row.escalated ? "row--escalating" : "",
                     fog ? "row--fog" : "",
                   ]
@@ -165,13 +166,7 @@ export function WatchList({
                     aria-label={`open the evidence crop for ${row.camera_id}`}
                   >
                     {thumb ? (
-                      <img
-                        className="evidence-thumb"
-                        src={apiUrl(thumb)}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
+                      <BufferedImg className="evidence-thumb" src={apiUrl(thumb)} />
                     ) : (
                       <span
                         className="evidence-thumb"

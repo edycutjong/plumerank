@@ -191,7 +191,7 @@ export function useWatchlist(): WatchlistState {
       if (lastTick.current === 0) return;
       // An unavailable pipeline never ticks by design; silence there is not a stopped loop.
       if (Date.now() - lastTick.current > SILENCE_MS) {
-        setState((prev) => (prev === "unavailable" ? prev : "idle"));
+        setState((prev) => (prev === "unavailable" || prev === "down" ? prev : "idle"));
       }
     }, 2_000);
 

@@ -23,28 +23,55 @@ export function AblationTable({ data }: { data: Benchmark }) {
     );
   }
 
+  // Columns that hold one value on every row (commit, budget, seed, n...) are stated
+  // once above the table instead of repeated twelve times: at 1440 px they pushed the
+  // columns that differ -- the design cells and their outcomes -- behind a scrollbar.
+  const constant = grid.columns
+    .map((c, j) => ({ c, j, v: grid.rows[0]?.[j] }))
+    .filter(({ j, v }) => grid.rows.every((r) => r[j] === v));
+  const constantIdx = new Set(constant.map(({ j }) => j));
+  const varying = grid.columns
+    .map((c, j) => ({ c, j }))
+    .filter(({ j }) => !constantIdx.has(j))
+    .sort((a, b) => order(a.c) - order(b.c));
+
   return (
-    <div className="scroll-x card">
-      <table>
-        <thead>
-          <tr>
-            {grid.columns.map((c) => (
-              <th key={c}>{c.replace(/_/g, " ")}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {grid.rows.map((row, i) => (
-            <tr key={i}>
-              {row.map((cell, j) => (
-                <td key={j} className={j === 0 ? undefined : "mono"} style={j === 0 ? undefined : { fontWeight: 400 }}>
-                  {cell}
-                </td>
+    <>
+      {constant.length > 0 ? (
+        <p className="mono" style={{ color: "var(--ink-2)", fontSize: "var(--size-label)", margin: "0 0 8px", overflowWrap: "anywhere" }}>
+          same on every row:{" "}
+          {constant.map(({ c, v }) => `${c.replace(/_/g, " ")} ${c === "commit" ? String(v).slice(0, 7) : v}`).join(" · ")}
+        </p>
+      ) : null}
+      <div className="scroll-x card">
+        <table>
+          <thead>
+            <tr>
+              {varying.map(({ c }) => (
+                <th key={c}>{c.replace(/_/g, " ")}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {grid.rows.map((row, i) => (
+              <tr key={i}>
+                {varying.map(({ j }, k) => (
+                  <td key={j} className={k === 0 ? undefined : "mono"} style={k === 0 ? undefined : { fontWeight: 400 }}>
+                    {row[j]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
+}
+
+/** The design cells first, then what they produced; anything unknown keeps file order after. */
+const PREFERRED = ["bg", "s4", "escalation", "n_detected", "n_missed", "p50_minutes", "p95_minutes"];
+function order(column: string): number {
+  const i = PREFERRED.indexOf(column);
+  return i === -1 ? PREFERRED.length : i;
 }

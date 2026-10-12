@@ -396,6 +396,25 @@ def test_a_transient_failure_is_retried_and_a_permanent_one_is_not(monkeypatch) 
     assert len(calls) == 1
 
 
+def test_a_body_cut_off_mid_transfer_is_retried(monkeypatch) -> None:
+    """IncompleteRead is an http.client.HTTPException, not an OSError, and it once escaped
+    the retry loop and ended a fresh-clone `make fetch` 23 minutes in."""
+    import http.client
+
+    monkeypatch.setattr(fetch, "RETRY_BACKOFF_SECONDS", 0.0)
+    calls: list[str] = []
+
+    def truncated_once(url: str, timeout: float = 0.0) -> bytes:
+        calls.append(url)
+        if len(calls) == 1:
+            raise http.client.IncompleteRead(b"partial", 100)
+        return b"ok"
+
+    monkeypatch.setattr(fetch, "http_get", truncated_once)
+    assert fetch.fetch_with_retry("https://x/d.jpg") == b"ok"
+    assert len(calls) == 2
+
+
 def test_transport_failures_eventually_give_up_loudly(monkeypatch) -> None:
     monkeypatch.setattr(fetch, "RETRY_BACKOFF_SECONDS", 0.0)
     monkeypatch.setattr(
