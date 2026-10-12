@@ -276,7 +276,7 @@ designed to be re-scored at every offset from −5 to +5 minutes from the same c
 matrix in the same run, so the sensitivity curve cannot drift from the headline it describes
 (`scripts/bench.py --sensitivity`).
 
-**Testing, as a form of evaluation in its own right.** 832 tests passed, 1 skipped locally (CI, without the corpus, runs 820 and skips 13), 100% line
+**Testing, as a form of evaluation in its own right.** 833 tests passed, 1 skipped locally (CI, without the corpus, runs 821 and skips 13), 100% line
 coverage on `plumerank/`; 1,500 hypothesis-generated cases (`tests/test_invariants.py`)
 property-testing that the fused hazard never leaves `[0, 1]` and the alert budget is never overspent
 across 500 generated inputs or call sequences each; `scripts/check_claims.py` mechanically checks every route,

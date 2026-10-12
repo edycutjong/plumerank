@@ -71,7 +71,7 @@ export default function JudgePage() {
       <Section title="2. The receipt">
         <ul className="bullets" style={{ color: "var(--ink-1)", lineHeight: 1.8 }}>
           <li>
-            <strong>832 passed, 1 skipped locally (CI, without the corpus, runs 820 and skips 13)</strong>, 100% line coverage on <code className="code-inline">plumerank/</code>
+            <strong>833 passed, 1 skipped locally (CI, without the corpus, runs 821 and skips 13)</strong>, 100% line coverage on <code className="code-inline">plumerank/</code>
           </li>
           <li>
             <strong>Property-based tests</strong> (<code className="code-inline">tests/test_invariants.py</code>,
@@ -108,7 +108,7 @@ export default function JudgePage() {
       <Section title="3. Reproduce it yourself">
         <pre className="code" style={{ padding: 12, overflowX: "auto", whiteSpace: "pre" }}>
 {`python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.lock
-make test      # ~2 min: 832-test offline suite + coverage + the claim-consistency check
+make test      # ~2 min: 833-test offline suite + coverage + the claim-consistency check
 make verify    # ≤ 3 min: rebuilds the venv, re-runs the suite, recomputes the
                # micro-corpus metrics against the committed results. Does NOT
                # reproduce the published headline, and says so on screen.`}

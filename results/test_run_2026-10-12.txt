@@ -1,0 +1,11 @@
+# Local test and verify runs -- 2026-10-12, arm64 laptop (Apple silicon), Python 3.11, warm pip cache
+
+## /usr/bin/time -p make verify (code at commit b04d3ae, venv rebuilt from requirements-dev.lock)
+  pytest tests -m 'not live' -q: 833 passed, 1 skipped
+  checked against: results/verify_micro.json -- MATCH (byte-for-byte)
+real 124.96
+user 115.35
+sys 9.33
+
+CI runs the same suite without data/corpus/: 821 passed, 13 skipped (GitHub Actions run 38228827405, commit b04d3ae).
+The one test added since test_run_2026-10-10.txt: tests/test_fetch.py::test_a_body_cut_off_mid_transfer_is_retried.

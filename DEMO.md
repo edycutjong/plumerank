@@ -18,7 +18,7 @@ This is the full walkthrough. For the 30-second version, see [`JUDGE.md`](JUDGE.
 git clone https://github.com/edycutjong/plumerank && cd plumerank
 make test      # offline suite + coverage + claim-consistency check
 make verify    # clean-venv sanity check (does NOT reproduce the published headline)
-               # measured 2026-10-10: real 129 s end to end (results/test_run_2026-10-10.txt)
+               # measured 2026-10-12: real 125 s end to end (results/test_run_2026-10-12.txt)
 ```
 
 Output of `make verify`'s final step (`scripts/bench.py --arm micro`), pasted verbatim; the full
@@ -64,7 +64,7 @@ expressed per 81-frame camera-window; B1's 3,645 is its 191,970 calls over the s
 same normalisation). `advantage not finite` means PlumeRank has a median at offsets where neither
 baseline has one, so a difference in minutes is undefined — not that there is no advantage.
 
-`make test` alone (the offline suite + coverage + `scripts/check_claims.py`): **832 passed, 1
+`make test` alone (the offline suite + coverage + `scripts/check_claims.py`): **833 passed, 1
 skipped, 100% line coverage on `plumerank/`, ~2 min, no network, no credentials.**
 
 ### The pair that reproduces the published headline
