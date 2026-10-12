@@ -896,7 +896,7 @@ def unify_windows(*groups: list[Window]) -> tuple[list[Window], ...]:
 def load_calibration(root: pathlib.Path, arm: str, excluded: Sequence[str]) -> list[Window]:
     """The windows every system's threshold is solved on -- the same set for all three.
 
-    For every real arm that is ``data/manifest_confuse.json``: 45 non-fire windows on the
+    For every real arm that is ``data/manifest_confuse.json``: 33 non-fire windows on the
     same cameras at the same time of day as HOLD. For ``micro`` it is the non-fire windows
     of the micro manifest itself, so that ``make verify`` needs no second corpus and no
     network.

@@ -24,10 +24,10 @@ recall — Dewangan et al., 2022, arXiv:2112.08598, Table 2 — with no alert bu
 a fixed false-alarm rate is the classical quickest-change-detection criterion: Page, 1954; Lorden,
 1971.)
 
-**The unit.** The budget is expressed per *camera-night*, which in this project means one
-evaluation window — 81 minutes of footage on one camera, the length of a FIgLib sequence — not a
-12-hour night: 2 alerts per 81-minute window is about 18 per camera over a continuous 12-hour
-shift. A deployment would set a per-shift budget and re-solve the threshold for it.
+**The unit.** The budget is expressed per *camera-window* (`camera_night` in the code, a name
+that reads like a 12-hour night and is not one): one evaluation window — 81 minutes of footage
+on one camera, the length of a FIgLib sequence. 2 alerts per 81-minute window is about 18 per
+camera over a continuous 12-hour shift. A deployment would set a per-shift budget and re-solve the threshold for it.
 
 ## 2. Users
 
@@ -101,7 +101,7 @@ the git commit sha, read live off the box.
 **Ground truth is mechanical, not hand-labelled.** HPWREN FIgLib records each sequence's
 ignition time, so time-to-detection needs zero labelling, no raters, and no institutional
 partner. **Every system is calibrated to the same alert budget on the same confusion set**
-before comparison (all land at 1.99 alerts/camera-night there), so the comparison happens at
+before comparison (all land at 1.99 alerts/camera-window there), so the comparison happens at
 the operating point a fire agency actually buys at, not at each system's most flattering one.
 The like-for-like rows put B1 and B2 through the same per-camera baseline PlumeRank uses; on
 DEV the realised rates then differ by system, and are listed.
@@ -113,7 +113,7 @@ DEV the realised rates then differ by system, and are listed.
 | Detected | **27 / 54** |
 | Median time-to-detection (misses = never) | **38.0 min** |
 | Mean time-to-detection of the detected fires | 13.3 min |
-| Alert rate | 1.99 alerts/camera-night on the confusion set (target 2.0); 1.92 realised on HOLD |
+| Alert rate | 1.99 alerts/camera-window on the confusion set (target 2.0); 1.92 realised on HOLD |
 | Escalation fraction | 1.76% of frames — within the 2% design cap |
 | **B1 through the same per-camera baseline as PlumeRank** | **18 / 54 detected — no median** |
 | **B2 through the same per-camera baseline as PlumeRank** | **20 / 54 detected — no median** |
@@ -133,7 +133,7 @@ DEV fire (18/29) than the shipped cell — disclosed, not acted on, because DEV 
 |---|---|
 | Detected | 17 / 29 |
 | Median time-to-detection | 32.0 min |
-| Alert rate | 1.99 alerts/camera-night on the confusion set (target 2.0); 2.37 realised on DEV |
+| Alert rate | 1.99 alerts/camera-window on the confusion set (target 2.0); 2.37 realised on DEV |
 | Escalation fraction | 2.14% of frames — over the 2% design cap (`within_max: false` in the run file) |
 | **B1 through the same per-camera baseline as PlumeRank** | **14 / 29 detected — no median** (2.51 realised on DEV) |
 | **B2 through the same per-camera baseline as PlumeRank** | **10 / 29 detected — no median** (2.05 realised on DEV) |

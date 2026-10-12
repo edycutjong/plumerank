@@ -65,7 +65,7 @@ explained by model size. The like-for-like rows go one step further: B1 and B2 a
 through the same per-camera baseline PlumeRank uses, and on DEV that baseline does most of the
 work (B1 rises from 6/29 to 14/29 through it, against PlumeRank's 17/29). What remains between
 PlumeRank and B1-through-the-baseline is the classical pipeline plus targeted escalation versus a
-full-frame CNN at every frame -- at 1.4 model calls per camera-night on the held-out run (1.7 on DEV) instead of 3,645.
+full-frame CNN at every frame -- at 1.4 model calls per camera-window on the held-out run (1.7 on DEV) instead of 3,645.
 
 ## Data flow, in order
 

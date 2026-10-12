@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="PlumeRank — ranks wildfire-camera tiles by how far each has left its own quiet night, at a fixed budget of 2 alerts per camera-night: Tile 17 jumps from thirtieth to first on the watch list, and one of its two budget slots fills.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="PlumeRank — ranks wildfire-camera tiles by how far each has left its own quiet night, at a fixed budget of 2 alerts per camera-window: Tile 17 jumps from thirtieth to first on the watch list, and one of its two budget slots fills.">
 <!-- STORYBOARD (dur 6s — must equal this file's single master dur)
   0-10%   steady state: plate, azimuth ring, the camera's view of a ridge at night, both budget slots empty; a scanning bearing sweeps the ring (poster rule: all brand layers at opacity 1)
   10-30%  trigger:      an ember appears on the ridge and a plume rises from it, soft at the crown, hard at the foot     data-story="beat-2"
   30-60%  mechanism:    Tile 17 jumps from thirtieth to first on the watch list, and one of its two budget slots fills.     data-story="beat-3"
                         (the sweep stops on the plume's bearing, the bearing tick lights ember, the left slot fills amber)
-  60-88%  resolution:   held — the bearing stays lit and the slot stays spent (a spent slot is gone for the camera-night); glow breath    data-story="beat-4"
+  60-88%  resolution:   held — the bearing stays lit and the slot stays spent (a spent slot is gone for the camera-window); glow breath    data-story="beat-4"
   88-100% breathe + seam fade: the story layer fades out 88-92%, the sweep resets unseen and returns 93-98.5%
 -->
 <style>

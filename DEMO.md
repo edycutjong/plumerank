@@ -94,10 +94,10 @@ The one HOLD read, as committed (`results/bench_2026-10-10.json`, `results/hold_
 | When / where | 2026-10-10T05:37Z, commit `5df7332`, local arm64 machine (`run.instance: local (not EC2)`), wall clock **12m29s** |
 | Freeze | `results/constants.sha256` = `02752e86…`, committed before the read; bench.py refuses HOLD otherwise |
 | Sequences | 54 measured (60 in the manifest, 6 excluded by `data/excluded.json`) |
-| PlumeRank | **27/54 detected, p50 38.0 min**, mean of detected 13.3 min, 1.92 alerts/camera-night realised |
+| PlumeRank | **27/54 detected, p50 38.0 min**, mean of detected 13.3 min, 1.92 alerts/camera-window realised |
 | Like-for-like baselines | B1 18/54, B2 20/54 — no median |
 | As-deployed baselines | B1 2/54, B2 4/54 — no median |
-| Escalation | 75 of 4,266 frames (1.76%) — within the 2% cap; 1.4 CNN calls per camera-night vs B1's 3,645 |
+| Escalation | 75 of 4,266 frames (1.76%) — within the 2% cap; 1.4 CNN calls per camera-window vs B1's 3,645 |
 | Per-frame latency (that machine) | classical p50 6.5 ms / p95 8.5 ms; B1 CNN-grid p50 53.6 ms |
 | Sensitivity | p50 32–38 min at ignition-clock offsets −5…0; no median at +1…+5 (`results/sensitivity_2026-10-10.csv`) |
 

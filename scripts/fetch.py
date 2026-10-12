@@ -13,13 +13,13 @@ under the same name and silently move the published headline; a receipt without 
 cannot tell a missing frame from a frame that was never wanted. Both are committed, so a
 judge who clones this repo and runs ``make fetch`` either gets the same images this project
 was measured on or gets a non-zero exit saying which one differs. The count is whatever the
-committed manifests add up to -- 2,409 DEV + 4,827 HOLD + 3,645 CONFUSE = 10,881 today --
+committed manifests add up to -- 2,409 DEV + 4,827 HOLD + 2,673 CONFUSE = 9,909 today --
 and it is printed per manifest at the end of the run rather than asserted here, because a
 number in a docstring cannot be re-derived and this one was wrong once already.
 
 Only the named windows -- never the archive
 -------------------------------------------
-FIgLib publishes 521 sequences. This script fetches 90 of them plus the 45 CONFUSE windows,
+FIgLib publishes 521 sequences. This script fetches 90 of them plus the 33 CONFUSE windows,
 because that is what the manifests name. Pulling the archive "to be safe" would be ~40 GB
 of somebody else's bandwidth for frames no arm of the evaluation ever reads.
 
